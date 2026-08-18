@@ -1,0 +1,7 @@
+fatal: ambiguous argument 'HEAD': unknown revision or path not in the working tree.
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'
+HEAD
+?? native_schedular/NativeScheduler/Sources/NativeScheduler/Features/FloatingPanel/NotchView.swift
+?? native_schedular/NativeScheduler/Sources/NativeScheduler/Features/FloatingPanel/NotchWindow.swift
+?? native_schedular/NativeScheduler/Tests/NativeSchedulerTests/NotchShellTests.swift

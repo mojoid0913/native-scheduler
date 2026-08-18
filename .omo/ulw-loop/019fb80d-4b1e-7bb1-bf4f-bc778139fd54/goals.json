@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "evidenceLayoutVersion": 2,
+  "createdAt": "2026-08-01T17:31:56.622Z",
+  "updatedAt": "2026-08-01T18:28:12.670Z",
+  "briefPath": ".omo/ulw-loop/019fb80d-4b1e-7bb1-bf4f-bc778139fd54/brief.md",
+  "goalsPath": ".omo/ulw-loop/019fb80d-4b1e-7bb1-bf4f-bc778139fd54/goals.json",
+  "ledgerPath": ".omo/ulw-loop/019fb80d-4b1e-7bb1-bf4f-bc778139fd54/ledger.jsonl",
+  "codexGoalMode": "aggregate",
+  "goals": [
+    {
+      "id": "G001-nativescheduler",
+      "title": "NativeScheduler의 노치 패널이 사용자가 접근 가능한 노치 아래 영역에 마우스를 올리면 안정적으로 확장되고, 마우...",
+      "objective": "NativeScheduler의 노치 패널이 사용자가 접근 가능한 노치 아래 영역에 마우스를 올리면 안정적으로 확장되고, 마우스가 패널 밖으로 나가면 축소되며, 재진입해도 반복 정상 동작하도록 현재 수정본을 실제 macOS GUI에서 검증하고 필요한 최소 수정까지 완료한다.",
+      "status": "complete",
+      "successCriteria": [
+        {
+          "id": "C001",
+          "scenario": "Computer-use happy path: launch NativeScheduler/.build/arm64-apple-macosx/debug/NativeScheduler, resolve its CGWindow ID, run precompiled /tmp/native-scheduler-ulw-hover/hover_probe hold 960 40 900 to hold the pointer in the visible below-notch strip, then run screencapture -x -l <windowID> .omo/ulw-loop/019fb80d-4b1e-7bb1-bf4f-bc778139fd54/evidence/hover/C001-expanded.png and inspect dimensions/content. PASS iff owner-only PNG width is 1632 and height is 768 (opaque 384pt panel crop) or 808 (full 404pt window including 20pt shadow padding), and it visibly contains live task/heatmap/timer UI; FAIL iff it remains collapsed around 440x76, is empty, or process exits.",
+          "userModel": "happy",
+          "expectedEvidence": ".omo/ulw-loop/019fb80d-4b1e-7bb1-bf4f-bc778139fd54/evidence/hover/C001-action.log plus C001-expanded.png with width 1632, height 768 or 808, visible live content, and SHA-256. RED reference: worker-initial C001 stayed 440x76; GREEN must be fresh current binary.",
+          "essential": true,
+          "capturedEvidence": "Parent real-surface run on current binary SHA-256 4358124481925bbf403a401098b7ada12a6f7f05628240ee5cb4e41ac81c3609, PID 53558, owner window 80677. CGWarpMouseCursorPosition plus CGEvent mouseMoved held Quartz (960,40); concurrent read observed NSEvent.mouseLocation (960,1203). Owner-only capture is 1632x768, SHA-256 250e1de008b9a55aefb045248844a1600b3bd90de457c4e76c4d67b8e6d7f8c8, visibly complete live task/heatmap/timer UI with unclipped Korean content. Process remained alive. Artifacts: .omo/ulw-loop/019fb80d-4b1e-7bb1-bf4f-bc778139fd54/evidence/hover/C001-action.log and C001-expanded.png @tree:unborn-untracked",
+          "status": "pass",
+          "capturedAt": "2026-08-01T18:04:12.719Z",
+          "notes": "Fresh parent independent PASS. A post-only synthetic control stayed collapsed because it did not update the system location intentionally rechecked after 80ms; warp plus mouseMoved reproduces actual pointer movement."
+        },
+        {
+          "id": "C002",
+          "scenario": "Computer-use exit edge: starting from C001 expanded state, run /tmp/native-scheduler-ulw-hover/hover_probe hold 80 800 700 to hold the pointer outside the 816x404 panel frame, then run screencapture -x -l <windowID> .omo/ulw-loop/019fb80d-4b1e-7bb1-bf4f-bc778139fd54/evidence/hover/C002-collapsed.png and sips -g pixelWidth -g pixelHeight. PASS iff the owner-only PNG returns to 440x76 within 700ms and NativeScheduler remains alive; FAIL iff it remains 1632x768, crashes, or expands again without re-entry.",
+          "userModel": "edge",
+          "expectedEvidence": ".omo/ulw-loop/019fb80d-4b1e-7bb1-bf4f-bc778139fd54/evidence/hover/C002-action.log plus C002-collapsed.png with 440x76 dimensions and SHA-256. RED reference: /tmp/native-scheduler-hover-observer-collapsed.png stayed expanded at 1632x768 before the outside-mouse path was completed.",
+          "essential": true,
+          "capturedEvidence": "Parent real-surface run on current binary SHA-256 4358124481925bbf403a401098b7ada12a6f7f05628240ee5cb4e41ac81c3609, same PID 53558/window 80677. Expanded precondition capture 1632x808 SHA-256 583fcf665dffc10e64e83db592346b5c7c5344f4ce68c98a43c34029bd2a2b43. Warp+mouseMoved to Quartz (80,800), 700ms wait, observed AppKit location (80,443); owner-only collapsed capture 440x76 SHA-256 eddffe085be61d3f50bbe9151ac61a14f869b333d8246e736867085e133a6356. Process remained alive. Artifacts: .omo/ulw-loop/019fb80d-4b1e-7bb1-bf4f-bc778139fd54/evidence/hover/C002-action.log, C002-precondition-expanded.png, C002-collapsed.png @tree:unborn-untracked",
+          "status": "pass",
+          "capturedAt": "2026-08-01T18:05:54.673Z",
+          "notes": "Fresh parent independent PASS from a proven expanded precondition on the same process and owner window."
+        },
+        {
+          "id": "C003",
+          "scenario": "Computer-use regression/adversarial stale-state cycle: on the same freshly launched binary and CGWindow ID, repeat three times: hold (960,40) then owner-only capture/assert width 1632 and height 768 or 808 with live content; hold (80,800) then capture/assert collapsed around 440x76. After six assertions run swift test --package-path NativeScheduler and swift build --package-path NativeScheduler. PASS iff all 3 enter/exit cycles alternate expanded and collapsed, process stays alive, final expanded capture shows task/heatmap/timer content without CJK clipping, all expected tests pass, and build exits 0.",
+          "userModel": "regression",
+          "expectedEvidence": ".omo/ulw-loop/019fb80d-4b1e-7bb1-bf4f-bc778139fd54/evidence/hover/C003-cycle.log, six owner-only PNG dimension/hash records, final visual PNG, and C003-tests.log. Expanded height may be 768 opaque crop or 808 full window including shadow; width must be 1632. RED reference: worker-initial all enters stayed 440x76.",
+          "essential": false,
+          "capturedEvidence": "Parent current-binary PID 53558/window 80677 completed three enter/exit cycles: each owner capture alternated 1632x808 to 440x76 and process stayed alive; cycle-3 expanded live Tasks/heatmap/timer/CJK visually unclipped. Full suite 33/33 and build exit 0. Cleanup removed QA PID/helper and restored cursor. Independent replacement manual QA on PID 26646/window 80740 repeated all three owner-only cycles with exact dimensions and privacy-safe captures. Code review and final gate APPROVE. Artifacts: .omo/ulw-loop/019fb80d-4b1e-7bb1-bf4f-bc778139fd54/evidence/hover/C003-cycle.log, six C003 PNGs, C003-tests.log, cleanup-receipt.txt, final-manual-qa/hover-final-manual-qa.md, .omo/evidence/G001-nativescheduler-code-review.md, .omo/evidence/G001-nativescheduler-gate-review.md @tree:unborn-untracked",
+          "status": "pass",
+          "capturedAt": "2026-08-01T18:22:33.928Z",
+          "notes": "Fresh parent and independent QA PASS; final source hashes NotchWindow 890c5daa..., NotchView 7fd5430c..., NotchShellTests 26e56e4d...; binary 43581244...; rejected full-screen QA captures were deleted and replaced with exactly six owner-only PNGs."
+        }
+      ],
+      "attempt": 1,
+      "createdAt": "2026-08-01T17:31:56.622Z",
+      "updatedAt": "2026-08-01T18:28:12.670Z",
+      "startedAt": "2026-08-01T17:36:22.817Z",
+      "completedAt": "2026-08-01T18:28:12.670Z",
+      "evidence": "All criteria PASS at @tree:unborn-untracked: C001 real owner-window hover expands to 1632x768/808 with live UI; C002 outside pointer collapses to 440x76 on same live PID; C003 three repeated enter/exit cycles pass in parent and independent privacy-safe owner-window QA. Swift tests 33/33 and build pass. Frozen code review CLEAR/APPROVE, manual QA PASS, final gate APPROVE; source hashes NotchWindow 890c5daa..., NotchView 7fd5430c..., NotchShellTests 26e56e4d..., binary 43581244.... All QA PIDs/helper directories absent before handoff launch."
+    }
+  ],
+  "codexObjective": "Complete the durable ulw-loop plan in .omo/ulw-loop/019fb80d-4b1e-7bb1-bf4f-bc778139fd54/goals.json, including later accepted/appended stories, under the original brief constraints; use .omo/ulw-loop/019fb80d-4b1e-7bb1-bf4f-bc778139fd54/ledger.jsonl as the audit trail.",
+  "aggregateCompletion": {
+    "status": "complete",
+    "completedAt": "2026-08-01T18:28:12.670Z",
+    "evidence": "All criteria PASS at @tree:unborn-untracked: C001 real owner-window hover expands to 1632x768/808 with live UI; C002 outside pointer collapses to 440x76 on same live PID; C003 three repeated enter/exit cycles pass in parent and independent privacy-safe owner-window QA. Swift tests 33/33 and build pass. Frozen code review CLEAR/APPROVE, manual QA PASS, final gate APPROVE; source hashes NotchWindow 890c5daa..., NotchView 7fd5430c..., NotchShellTests 26e56e4d..., binary 43581244.... All QA PIDs/helper directories absent before handoff launch.",
+    "codexGoal": {
+      "goal": {
+        "threadId": "019fb80d-4b1e-7bb1-bf4f-bc778139fd54",
+        "objective": "Complete the durable ulw-loop plan in .omo/ulw-loop/019fb80d-4b1e-7bb1-bf4f-bc778139fd54/goals.json, including later accepted/appended stories, under the original brief constraints; use .omo/ulw-loop/019fb80d-4b1e-7bb1-bf4f-bc778139fd54/ledger.jsonl as the audit trail.",
+        "status": "complete",
+        "tokensUsed": 4311,
+        "timeUsedSeconds": 6,
+        "createdAt": 1785608747,
+        "updatedAt": 1785608754
+      },
+      "remainingTokens": null,
+      "completionBudgetReport": null
+    }
+  }
+}

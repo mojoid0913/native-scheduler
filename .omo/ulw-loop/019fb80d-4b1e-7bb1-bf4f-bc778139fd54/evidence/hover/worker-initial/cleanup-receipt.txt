@@ -1,0 +1,4 @@
+worker_pid=60767 terminated_at=2026-08-02T02:41:34+09:00
+PASS-absent
+temp_dir=absent
+repo_temp_dir=absent

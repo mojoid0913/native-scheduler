@@ -1,0 +1,4 @@
+temp_helper=absent
+cursor_restore=confirmed_by_c003-reexit-helper.log
+qa_pids=14577,16664,18110 absent
+native_scheduler_processes=none

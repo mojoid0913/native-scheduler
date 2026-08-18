@@ -1,0 +1,570 @@
+diff --git a/NativeScheduler/Sources/NativeScheduler/Features/FloatingPanel/NotchWindow.swift b/NativeScheduler/Sources/NativeScheduler/Features/FloatingPanel/NotchWindow.swift
+new file mode 100644
+index 0000000..43be6b7
+--- /dev/null
++++ b/NativeScheduler/Sources/NativeScheduler/Features/FloatingPanel/NotchWindow.swift
+@@ -0,0 +1,237 @@
++@preconcurrency import AppKit
++import Combine
++import SwiftUI
++
++final class PassthroughHostingView<Content: View>: NSHostingView<Content> {
++    weak var windowState: NotchWindowState?
++    weak var timerState: NotchTimerState?
++    var notchSize: CGSize = .zero
++    private var hoverTrackingArea: NSTrackingArea?
++    private var hoverTask: Task<Void, Never>?
++
++    var hoverHitRect: CGRect {
++        NotchGeometry.hitRect(
++            bounds: bounds,
++            isExpanded: windowState?.isExpanded ?? false,
++            notchWidth: notchSize.width,
++            notchHeight: notchSize.height,
++            showsProgress: timerState?.snapshot.isRunning ?? false
++        )
++    }
++
++    override func acceptsFirstMouse(for event: NSEvent?) -> Bool {
++        true
++    }
++
++    override func hitTest(_ point: NSPoint) -> NSView? {
++        guard let windowState, !windowState.isExpanded else {
++            return super.hitTest(point)
++        }
++
++        return hoverHitRect.contains(point) ? super.hitTest(point) : nil
++    }
++
++    override func updateTrackingAreas() {
++        super.updateTrackingAreas()
++        if let hoverTrackingArea {
++            removeTrackingArea(hoverTrackingArea)
++        }
++
++        let trackingArea = NSTrackingArea(
++            rect: hoverHitRect,
++            options: [.mouseEnteredAndExited, .activeAlways],
++            owner: self,
++            userInfo: nil
++        )
++        addTrackingArea(trackingArea)
++        hoverTrackingArea = trackingArea
++    }
++
++    override func mouseEntered(with event: NSEvent) {
++        hoverTask?.cancel()
++        guard windowState?.isExpanded == false else { return }
++
++        hoverTask = Task { @MainActor [weak self] in
++            try? await Task.sleep(for: .milliseconds(80))
++            guard !Task.isCancelled,
++                  let self,
++                  let windowState = self.windowState,
++                  !windowState.isExpanded,
++                  let window = self.window,
++                  NotchGeometry.containsScreenPoint(
++                    NSEvent.mouseLocation,
++                    windowFrame: window.frame,
++                    localRect: self.hoverHitRect
++                  ) else { return }
++            windowState.isExpanded = true
++        }
++    }
++
++    override func mouseExited(with event: NSEvent) {
++        hoverTask?.cancel()
++        guard let windowState, windowState.isExpanded else { return }
++        windowState.isExpanded = false
++    }
++}
++
++final class NotchWindow: NSPanel {
++    private let windowState: NotchWindowState
++    private let timerState: NotchTimerState
++    private let expandedContent: AnyView
++    private let onQuit: () -> Void
++
++    private var hostingView: PassthroughHostingView<AnyView>?
++    private var expansionCancellable: AnyCancellable?
++    private nonisolated(unsafe) var globalMouseMonitor: Any?
++    private nonisolated(unsafe) var localKeyMonitor: Any?
++    private nonisolated(unsafe) var screenObserver: NSObjectProtocol?
++
++    init(
++        windowState: NotchWindowState,
++        timerState: NotchTimerState,
++        expandedContent: AnyView,
++        onQuit: @escaping () -> Void
++    ) {
++        self.windowState = windowState
++        self.timerState = timerState
++        self.expandedContent = expandedContent
++        self.onQuit = onQuit
++
++        let screen = NotchGeometry.preferredScreen() ?? NSScreen.screens[0]
++        let frame = NotchGeometry.windowFrame(for: screen)
++
++        super.init(
++            contentRect: frame,
++            styleMask: [.borderless, .nonactivatingPanel],
++            backing: .buffered,
++            defer: false
++        )
++
++        isFloatingPanel = true
++        isOpaque = false
++        titleVisibility = .hidden
++        titlebarAppearsTransparent = true
++        backgroundColor = .clear
++        hasShadow = false
++        isMovable = false
++        level = NSWindow.Level(rawValue: NSWindow.Level.mainMenu.rawValue + 3)
++        appearance = NSAppearance(named: .darkAqua)
++        collectionBehavior = [.fullScreenAuxiliary, .stationary, .canJoinAllSpaces, .ignoresCycle]
++        acceptsMouseMovedEvents = true
++        becomesKeyOnlyIfNeeded = false
++        isReleasedWhenClosed = false
++
++        setupContent()
++        setupExpansionObserver()
++        setupMonitors()
++        setupScreenObserver()
++    }
++
++    func updateForCurrentScreen() {
++        guard let screen = NotchGeometry.preferredScreen() else {
++            orderOut(nil)
++            return
++        }
++
++        setFrame(NotchGeometry.windowFrame(for: screen), display: false)
++        refreshRootView(for: screen)
++        orderFrontRegardless()
++    }
++
++    private func setupContent() {
++        let screen = NotchGeometry.preferredScreen() ?? NSScreen.screens[0]
++        let hostingView = PassthroughHostingView(rootView: makeRootView(for: screen))
++        hostingView.windowState = windowState
++        hostingView.timerState = timerState
++        hostingView.notchSize = CGSize(
++            width: NotchGeometry.notchWidth(for: screen),
++            height: NotchGeometry.notchHeight(for: screen)
++        )
++        hostingView.frame = CGRect(origin: .zero, size: frame.size)
++        contentView = hostingView
++        self.hostingView = hostingView
++    }
++
++    private func refreshRootView(for screen: NSScreen) {
++        guard let hostingView else { return }
++        hostingView.notchSize = CGSize(
++            width: NotchGeometry.notchWidth(for: screen),
++            height: NotchGeometry.notchHeight(for: screen)
++        )
++        hostingView.frame = CGRect(origin: .zero, size: frame.size)
++        hostingView.rootView = makeRootView(for: screen)
++        hostingView.updateTrackingAreas()
++    }
++
++    private func makeRootView(for screen: NSScreen) -> AnyView {
++        AnyView(
++            NotchView(
++                windowState: windowState,
++                timerState: timerState,
++                notchSize: CGSize(
++                    width: NotchGeometry.notchWidth(for: screen),
++                    height: NotchGeometry.notchHeight(for: screen)
++                ),
++                expandedContent: expandedContent,
++                onQuit: onQuit
++            )
++        )
++    }
++
++    private func setupExpansionObserver() {
++        expansionCancellable = windowState.$isExpanded
++            .removeDuplicates()
++            .dropFirst()
++            .sink { [weak self] _ in
++                DispatchQueue.main.async {
++                    guard let self, let screen = self.screen ?? NotchGeometry.preferredScreen() else { return }
++                    self.refreshRootView(for: screen)
++                }
++            }
++    }
++
++    private func setupMonitors() {
++        globalMouseMonitor = NSEvent.addGlobalMonitorForEvents(
++            matching: [.mouseMoved, .leftMouseDown, .rightMouseDown, .otherMouseDown]
++        ) { [weak self] _ in
++            guard let self, self.windowState.isExpanded else { return }
++            if !self.frame.contains(NSEvent.mouseLocation) {
++                DispatchQueue.main.async { self.windowState.isExpanded = false }
++            }
++        }
++
++        localKeyMonitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown]) { [weak self] event in
++            guard let self else { return event }
++            guard event.keyCode == 53, self.windowState.isExpanded else { return event }
++            self.windowState.isExpanded = false
++            return nil
++        }
++    }
++
++    private func setupScreenObserver() {
++        screenObserver = NotificationCenter.default.addObserver(
++            forName: NSApplication.didChangeScreenParametersNotification,
++            object: nil,
++            queue: .main
++        ) { [weak self] _ in
++            MainActor.assumeIsolated {
++                self?.updateForCurrentScreen()
++            }
++        }
++    }
++
++    deinit {
++        if let globalMouseMonitor {
++            NSEvent.removeMonitor(globalMouseMonitor)
++        }
++        if let localKeyMonitor {
++            NSEvent.removeMonitor(localKeyMonitor)
++        }
++        if let screenObserver {
++            NotificationCenter.default.removeObserver(screenObserver)
++        }
++    }
++
++    override var canBecomeKey: Bool { true }
++    override var canBecomeMain: Bool { true }
++}
+diff --git a/NativeScheduler/Sources/NativeScheduler/Features/FloatingPanel/NotchView.swift b/NativeScheduler/Sources/NativeScheduler/Features/FloatingPanel/NotchView.swift
+new file mode 100644
+index 0000000..788e122
+--- /dev/null
++++ b/NativeScheduler/Sources/NativeScheduler/Features/FloatingPanel/NotchView.swift
+@@ -0,0 +1,160 @@
++import AppKit
++import SwiftUI
++
++struct NotchView: View {
++    @ObservedObject var windowState: NotchWindowState
++    @ObservedObject var timerState: NotchTimerState
++
++    let notchSize: CGSize
++    let expandedContent: AnyView
++    let onQuit: () -> Void
++
++    @State private var isHovering = false
++    @State private var pulseScale: CGFloat = 1.0
++
++    private let expandedContentHorizontalPadding: CGFloat = 20
++    private let mainPanelHorizontalPadding: CGFloat = 14
++    private let shellMenuTopOffset: CGFloat = 13
++    private let shellMenuIconColor = Color.nsTextSecondary
++
++    private var isExpanded: Bool { windowState.isExpanded }
++
++    private var panelWidth: CGFloat {
++        if isExpanded {
++            return NotchGeometry.expandedPanelWidth
++        }
++
++        return NotchGeometry.idleShellWidth(
++            notchWidth: notchSize.width,
++            showsProgress: timerState.snapshot.isRunning
++        )
++    }
++
++    private var panelHeight: CGFloat {
++        isExpanded ? NotchGeometry.expandedPanelHeight : NotchGeometry.idleShellHeight(notchHeight: notchSize.height)
++    }
++
++    private var panelLeadingPadding: CGFloat {
++        if isExpanded { return 0 }
++        return max(0, NotchGeometry.idleShellMinX(boundsWidth: NotchGeometry.expandedPanelWidth, notchWidth: notchSize.width))
++    }
++
++    private var topRadius: CGFloat {
++        isExpanded ? NotchGeometry.cornerRadiusOpen.top : NotchGeometry.cornerRadiusClosed.top
++    }
++
++    private var bottomRadius: CGFloat {
++        isExpanded ? NotchGeometry.cornerRadiusOpen.bottom : NotchGeometry.cornerRadiusClosed.bottom
++    }
++
++    var body: some View {
++        ZStack(alignment: .topLeading) {
++            growingPanel
++                .padding(.leading, panelLeadingPadding)
++                .animation(isExpanded ? NotchAnimation.expand : NotchAnimation.collapse, value: isExpanded)
++                .animation(NotchAnimation.expand, value: timerState.snapshot.isRunning)
++                .animation(NotchAnimation.hover, value: isHovering)
++        }
++        .padding(.bottom, NotchGeometry.shadowPadding)
++        .contentShape(Rectangle())
++        .onHover { hovering in
++            withAnimation(NotchAnimation.hover) { isHovering = hovering }
++        }
++        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
++        .ignoresSafeArea()
++        .compositingGroup()
++        .preferredColorScheme(.dark)
++    }
++
++    private var growingPanel: some View {
++        ZStack(alignment: .top) {
++            Color.black
++
++            if isExpanded {
++                expandedContent
++                    .frame(maxWidth: .infinity, maxHeight: .infinity)
++                    .padding(.horizontal, expandedContentHorizontalPadding)
++                    .padding(.top, notchSize.height + 10)
++                    .padding(.bottom, 16)
++                    .transition(.asymmetric(
++                        insertion: .opacity.animation(.easeIn(duration: 0.10).delay(0.18)),
++                        removal: .opacity.animation(.easeOut(duration: 0.07))
++                    ))
++
++                shellMenu
++                    .padding(.top, notchSize.height + shellMenuTopOffset)
++                    .padding(.trailing, expandedContentHorizontalPadding + mainPanelHorizontalPadding)
++                    .frame(maxWidth: .infinity, alignment: .topTrailing)
++            } else if timerState.snapshot.isRunning {
++                progressRing(size: 18, lineWidth: 2.5)
++                    .padding(.top, 8)
++                    .padding(.trailing, 14)
++                    .frame(maxWidth: .infinity, alignment: .topTrailing)
++                    .transition(.opacity.animation(.easeInOut(duration: 0.16)))
++            }
++        }
++        .frame(width: panelWidth, height: panelHeight)
++        .clipShape(NotchShape(topCornerRadius: topRadius, bottomCornerRadius: bottomRadius))
++        .shadow(
++            color: .black.opacity(isExpanded ? 0.65 : (isHovering ? 0.40 : 0)),
++            radius: 10, x: 0, y: 4
++        )
++        .scaleEffect(pulseScale)
++        .animation(.spring(response: 0.4, dampingFraction: 0.6), value: timerState.completionPulse)
++        .contentShape(Rectangle())
++        .onTapGesture {
++            guard !isExpanded else { return }
++            windowState.isExpanded = true
++        }
++        .onChange(of: timerState.completionPulse) { _, _ in
++            withAnimation(.spring(response: 0.35, dampingFraction: 0.65)) {
++                pulseScale = 1.06
++            }
++
++            DispatchQueue.main.asyncAfter(deadline: .now() + 0.28) {
++                withAnimation(.spring(response: 0.30, dampingFraction: 0.72)) {
++                    pulseScale = 1.0
++                }
++            }
++        }
++    }
++
++    private func progressRing(size: CGFloat, lineWidth: CGFloat) -> some View {
++        let progress = max(0, min(timerState.snapshot.progress, 1))
++        let categoryColor = Color(hex: timerState.snapshot.categoryColorHex)
++
++        return ZStack {
++            Circle()
++                .stroke(categoryColor.opacity(0.18), lineWidth: lineWidth)
++
++            Circle()
++                .trim(from: 0, to: progress)
++                .stroke(categoryColor, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
++                .rotationEffect(.degrees(-90))
++        }
++        .frame(width: size, height: size)
++        .accessibilityHidden(true)
++    }
++
++    private var shellMenu: some View {
++        Menu {
++            Button("Settings") {
++                NotificationCenter.default.post(name: .nativeSchedulerOpenSettings, object: nil)
++            }
++            Divider()
++            Button("Quit NativeScheduler", action: onQuit)
++        } label: {
++            Image(systemName: "gearshape.fill")
++                .symbolRenderingMode(.monochrome)
++                .font(.system(size: 11, weight: .semibold))
++                .foregroundStyle(shellMenuIconColor)
++                .frame(width: 22, height: 22)
++                .background(Color.gray.opacity(0.14))
++                .clipShape(Circle())
++        }
++        .menuStyle(.borderlessButton)
++        .menuIndicator(.hidden)
++        .tint(shellMenuIconColor)
++        .accessibilityLabel("Shell menu")
++    }
++}
+diff --git a/NativeScheduler/Tests/NativeSchedulerTests/NotchShellTests.swift b/NativeScheduler/Tests/NativeSchedulerTests/NotchShellTests.swift
+new file mode 100644
+index 0000000..000ff5e
+--- /dev/null
++++ b/NativeScheduler/Tests/NativeSchedulerTests/NotchShellTests.swift
+@@ -0,0 +1,155 @@
++import XCTest
++import SwiftUI
++@testable import NativeScheduler
++
++final class NotchShellTests: XCTestCase {
++    func testActiveTimerThemeUsesSingleResolver() {
++        XCTAssertEqual(TimerViewModel.resolvedThemeColorHex("#ffa94d"), "#FFA94D")
++        XCTAssertEqual(TimerViewModel.resolvedThemeColorHex(nil), "#3A3A3A")
++    }
++
++    func testCategoryAccentHexNormalizesValidValuesAndFallsBackForMalformedValues() {
++        XCTAssertEqual(Color.resolvedCategoryHex("#ffa94d"), "#FFA94D")
++        XCTAssertEqual(Color.resolvedCategoryHex("FFA94D"), "#FFA94D")
++        XCTAssertEqual(Color.resolvedCategoryHex("not-a-color"), "#3A3A3A")
++        XCTAssertEqual(Color.resolvedCategoryHex(nil), "#3A3A3A")
++    }
++
++    func testCategoryAccentSnapshotCarriesSelectedCategoryInsteadOfDefaultFallback() {
++        let snapshot = NotchTimerSnapshot(
++            isRunning: true,
++            progress: 0.5,
++            categoryColorHex: "#FFA94D"
++        )
++
++        XCTAssertEqual(snapshot.categoryColorHex, "#FFA94D")
++        XCTAssertNotEqual(snapshot.categoryColorHex, Color.nsDefaultSlot.hexString)
++        XCTAssertEqual(NotchTimerSnapshot().categoryColorHex, "#3A3A3A")
++    }
++
++    func testAnchorMidXPrefersHardwareNotchGap() {
++        let result = NotchGeometry.anchorMidX(
++            leftAuxMaxX: 702,
++            rightAuxMinX: 810,
++            safeAreaMidX: 760,
++            screenMidX: 756
++        )
++
++        XCTAssertEqual(result, 756, accuracy: 0.001)
++    }
++
++    func testIdleShellWidthExpandsWhenTimerIndicatorIsVisible() {
++        let widthWithoutIndicator = NotchGeometry.idleShellWidth(notchWidth: 184, showsProgress: false)
++        let widthWithIndicator = NotchGeometry.idleShellWidth(notchWidth: 184, showsProgress: true)
++
++        XCTAssertGreaterThan(widthWithIndicator, widthWithoutIndicator)
++        XCTAssertEqual(widthWithoutIndicator, 184, accuracy: 0.001)
++        XCTAssertEqual(widthWithIndicator, 228, accuracy: 0.001)
++    }
++
++    func testCollapsedHitRectIsCenteredOnIdleShellOnly() {
++        let bounds = CGRect(
++            x: 0,
++            y: 0,
++            width: NotchGeometry.expandedPanelWidth,
++            height: NotchGeometry.expandedPanelHeight + NotchGeometry.shadowPadding
++        )
++        let rect = NotchGeometry.hitRect(
++            bounds: bounds,
++            isExpanded: false,
++            notchWidth: 184,
++            notchHeight: 32,
++            showsProgress: true
++        )
++
++        XCTAssertEqual(rect.width, 228, accuracy: 0.001)
++        XCTAssertEqual(rect.minX, (bounds.width - 184) / 2, accuracy: 0.001)
++        XCTAssertEqual(rect.maxX, ((bounds.width - 184) / 2) + 228, accuracy: 0.001)
++        XCTAssertEqual(rect.minY, 0, accuracy: 0.001)
++        XCTAssertEqual(rect.height, 53, accuracy: 0.001)
++        XCTAssertTrue(rect.contains(CGPoint(x: bounds.midX, y: 40)))
++        XCTAssertTrue(rect.contains(CGPoint(x: bounds.midX + 113, y: 20)))
++    }
++
++    func testExpandedHitRectMatchesExpandedShellBounds() {
++        let bounds = CGRect(
++            x: 0,
++            y: 0,
++            width: NotchGeometry.expandedPanelWidth,
++            height: NotchGeometry.expandedPanelHeight + NotchGeometry.shadowPadding
++        )
++        let rect = NotchGeometry.hitRect(
++            bounds: bounds,
++            isExpanded: true,
++            notchWidth: 184,
++            notchHeight: 32,
++            showsProgress: false
++        )
++
++        XCTAssertEqual(rect.width, NotchGeometry.expandedPanelWidth, accuracy: 0.001)
++        XCTAssertEqual(rect.height, NotchGeometry.expandedPanelHeight + NotchGeometry.shadowPadding, accuracy: 0.001)
++        XCTAssertEqual(rect.minY, 0, accuracy: 0.001)
++    }
++
++    func testScreenPointBelowHardwareNotchRemainsInsideHoverHitRegion() {
++        let windowFrame = CGRect(x: 552, y: 839, width: 816, height: 404)
++        let hitRect = NotchGeometry.hitRect(
++            bounds: CGRect(origin: .zero, size: windowFrame.size),
++            isExpanded: false,
++            notchWidth: 220,
++            notchHeight: 37,
++            showsProgress: false
++        )
++
++        XCTAssertTrue(NotchGeometry.containsScreenPoint(
++            CGPoint(x: 960, y: 1_203),
++            windowFrame: windowFrame,
++            localRect: hitRect
++        ))
++        XCTAssertFalse(NotchGeometry.containsScreenPoint(
++            CGPoint(x: 960, y: 1_000),
++            windowFrame: windowFrame,
++            localRect: hitRect
++        ))
++    }
++
++    @MainActor
++    func testHostingViewTracksCollapsedNativeHoverRegion() throws {
++        let state = NotchWindowState()
++        let timerState = NotchTimerState()
++        let view = PassthroughHostingView(rootView: EmptyView())
++        view.windowState = state
++        view.timerState = timerState
++        view.notchSize = CGSize(width: 220, height: 37)
++        view.frame = CGRect(x: 0, y: 0, width: 816, height: 404)
++
++        view.updateTrackingAreas()
++
++        let area = try XCTUnwrap(view.trackingAreas.first {
++            ($0.owner as AnyObject?) === view && $0.options.contains(.mouseEnteredAndExited)
++        })
++        XCTAssertEqual(area.rect, view.hoverHitRect)
++        XCTAssertTrue(area.options.contains(.activeAlways))
++        XCTAssertTrue(area.rect.contains(CGPoint(x: 408, y: 40)))
++    }
++
++    func testWindowFrameStaysTopAlignedToScreen() {
++        let screenFrame = CGRect(x: 0, y: 0, width: 1512, height: 982)
++        let frame = NotchGeometry.windowFrame(screenFrame: screenFrame, anchorMidX: 756)
++
++        XCTAssertEqual(frame.midX, 756, accuracy: 0.001)
++        XCTAssertEqual(frame.maxY, screenFrame.maxY, accuracy: 0.001)
++        XCTAssertEqual(frame.width, NotchGeometry.expandedPanelWidth, accuracy: 0.001)
++    }
++
++    @MainActor
++    func testWindowStateTracksHoverExpansion() {
++        let state = NotchWindowState()
++
++        state.isExpanded = true
++        XCTAssertTrue(state.isExpanded)
++
++        state.isExpanded = false
++        XCTAssertFalse(state.isExpanded)
++    }
++}

@@ -1,0 +1,42 @@
+name: NativeScheduler
+options:
+  bundleIdPrefix: com.nativescheduler
+  deploymentTarget:
+    macOS: "14.0"
+  xcodeVersion: "16.0"
+  generateEmptyDirectories: true
+
+settings:
+  base:
+    SWIFT_VERSION: 6.0
+    MACOSX_DEPLOYMENT_TARGET: "14.0"
+    CODE_SIGN_STYLE: Automatic
+    ENABLE_HARDENED_RUNTIME: YES
+
+targets:
+  NativeScheduler:
+    type: application
+    platform: macOS
+    sources:
+      - path: Sources/NativeScheduler
+        type: group
+        excludes:
+          - Resources/Info.plist
+    info:
+      path: Sources/NativeScheduler/Resources/Info.plist
+      properties:
+        CFBundleName: NativeScheduler
+        CFBundleDisplayName: NativeScheduler
+        CFBundleIdentifier: com.nativescheduler.app
+        CFBundleVersion: "1"
+        CFBundleShortVersionString: "1.0.0"
+        CFBundleExecutable: "$(EXECUTABLE_NAME)"
+        CFBundlePackageType: APPL
+        NSPrincipalClass: NSApplication
+        LSUIElement: true
+        NSHighResolutionCapable: true
+        LSMinimumSystemVersion: "14.0"
+    settings:
+      base:
+        PRODUCT_NAME: NativeScheduler
+        PRODUCT_BUNDLE_IDENTIFIER: com.nativescheduler.app

@@ -1,0 +1,75 @@
+{
+  "version": 1,
+  "evidenceLayoutVersion": 2,
+  "createdAt": "2026-08-02T04:17:20.069Z",
+  "updatedAt": "2026-08-02T05:08:59.259Z",
+  "briefPath": ".omo/ulw-loop/hover-option-pin-20260802-a1/brief.md",
+  "goalsPath": ".omo/ulw-loop/hover-option-pin-20260802-a1/goals.json",
+  "ledgerPath": ".omo/ulw-loop/hover-option-pin-20260802-a1/ledger.jsonl",
+  "codexGoalMode": "aggregate",
+  "goals": [
+    {
+      "id": "G001-omo-ulw-loop",
+      "title": "$omo:ulw-loop 지금 카테고리를 설정하는 등 할 때, 기존에 마우스포인터 허용하는 범위를 벗어나면 바로 꺼져서 제대...",
+      "objective": "$omo:ulw-loop 지금 카테고리를 설정하는 등 할 때, 기존에 마우스포인터 허용하는 범위를 벗어나면 바로 꺼져서 제대로 선택할 수 없어. 옵션 누르면 그 탭까지는 탭 확장된거 유지하도록 수정해봐. 우선 문제정의하구 검증하구 수정하고 테스트까지 거쳐",
+      "status": "complete",
+      "successCriteria": [
+        {
+          "id": "C001",
+          "scenario": "Native macOS pointer+click QA: expand the notch, click Select category, move the pointer from the parent notch into the category popover outside the old hover range, choose a category; PASS only if the parent remains expanded until selection and the chosen category label/color is applied.",
+          "userModel": "happy",
+          "expectedEvidence": ".omo/evidence/ulw/hover-option-pin-20260802-a1/G001-omo-ulw-loop/a1/manualQa/green-category-selection.png plus a1/tests RED/GREEN transcripts.",
+          "essential": true,
+          "capturedEvidence": "Live PID 60540: parent+popover remained 2 visible windows after 1.2s outside-parent hold (manualQa/root-pin-hold.log); Resting option click read back as green Resting selector (manualQa/green-category-selection.png); behavioral RED and GREEN transcripts in a1/tests. @tree:unborn-99ad4d07 | cleanup: QA helpers moved recoverably to ~/.Trash/native-scheduler-option-pin-temp-20260802; pointer neutral; correct app intentionally left running collapsed.",
+          "status": "pass",
+          "capturedAt": "2026-08-02T04:56:12.817Z"
+        },
+        {
+          "id": "C002",
+          "scenario": "Dismiss the category/settings option surface without leaving it active, then move the pointer outside every NativeScheduler window; PASS only if the interaction pin is released and the notch returns to its collapsed shell.",
+          "userModel": "edge",
+          "expectedEvidence": ".omo/evidence/ulw/hover-option-pin-20260802-a1/G001-omo-ulw-loop/a1/manualQa/green-release-collapse.png plus a1/tests full-suite transcript.",
+          "essential": true,
+          "capturedEvidence": "Category/Settings dismissal released the interaction pin; outside pointer collapsed to the black shell visibly against purple in manualQa/green-collapsed-context.png; unlocked mouse-exit PIN and full 35/35 suite pass. @tree:unborn-99ad4d07 | cleanup: superseded transparent captures moved recoverably to ~/.Trash/native-scheduler-option-pin-qa-20260802; no temporary QA process remains.",
+          "status": "pass",
+          "capturedAt": "2026-08-02T04:56:12.908Z"
+        },
+        {
+          "id": "C003",
+          "scenario": "Build the exact workspace source into the launched app bundle, verify PID/executable provenance, and repeat ordinary hover expansion followed by outside-pointer collapse with no option open.",
+          "userModel": "regression",
+          "expectedEvidence": ".omo/evidence/ulw/hover-option-pin-20260802-a1/G001-omo-ulw-loop/a1/manualQa/runtime-provenance.txt and green-ordinary-hover.png.",
+          "essential": false,
+          "capturedEvidence": "Current source hash 99ad4d07... built via Xcode Debug; PID 60540 PPID1 runs exact OptionPin-a1 bundle with loaded dylib hash b4a799ed...; ordinary hover expand/outside collapse passed and dual visual QA reports PASS. @tree:unborn-99ad4d07 | cleanup: old PID 90771 terminated; exact new app intentionally remains running collapsed for user inspection.",
+          "status": "pass",
+          "capturedAt": "2026-08-02T04:56:12.997Z"
+        }
+      ],
+      "attempt": 1,
+      "createdAt": "2026-08-02T04:17:20.069Z",
+      "updatedAt": "2026-08-02T05:08:59.259Z",
+      "startedAt": "2026-08-02T04:18:47.322Z",
+      "completedAt": "2026-08-02T05:08:59.259Z",
+      "evidence": "Targeted regression 1/1 PASS; full SwiftPM suite 35/35 PASS; Xcode Debug BUILD SUCCEEDED; exact PID 60540 native QA PASS for held category popover, Resting selection/read-back, Settings hold, release collapse, and ordinary hover; code review CLEAR; manual QA passed; visual QA PASS x2; gate APPROVE."
+    }
+  ],
+  "codexObjective": "Complete the durable ulw-loop plan in .omo/ulw-loop/hover-option-pin-20260802-a1/goals.json, including later accepted/appended stories, under the original brief constraints; use .omo/ulw-loop/hover-option-pin-20260802-a1/ledger.jsonl as the audit trail.",
+  "aggregateCompletion": {
+    "status": "complete",
+    "completedAt": "2026-08-02T05:08:59.259Z",
+    "evidence": "Targeted regression 1/1 PASS; full SwiftPM suite 35/35 PASS; Xcode Debug BUILD SUCCEEDED; exact PID 60540 native QA PASS for held category popover, Resting selection/read-back, Settings hold, release collapse, and ordinary hover; code review CLEAR; manual QA passed; visual QA PASS x2; gate APPROVE.",
+    "codexGoal": {
+      "goal": {
+        "threadId": "019fb80d-4b1e-7bb1-bf4f-bc778139fd54",
+        "objective": "Complete the durable ulw-loop plan in .omo/ulw-loop/hover-option-pin-20260802-a1/goals.json, including later accepted/appended stories, under the original brief constraints; use .omo/ulw-loop/hover-option-pin-20260802-a1/ledger.jsonl as the audit trail.",
+        "status": "complete",
+        "tokensUsed": 0,
+        "timeUsedSeconds": 10,
+        "createdAt": 1785647210,
+        "updatedAt": 1785647221
+      },
+      "remainingTokens": null,
+      "completionBudgetReport": null
+    }
+  }
+}

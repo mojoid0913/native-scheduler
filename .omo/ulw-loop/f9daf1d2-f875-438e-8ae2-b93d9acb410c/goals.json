@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "evidenceLayoutVersion": 2,
+  "createdAt": "2026-08-02T02:59:18.020Z",
+  "updatedAt": "2026-08-02T03:29:32.092Z",
+  "briefPath": ".omo/ulw-loop/f9daf1d2-f875-438e-8ae2-b93d9acb410c/brief.md",
+  "goalsPath": ".omo/ulw-loop/f9daf1d2-f875-438e-8ae2-b93d9acb410c/goals.json",
+  "ledgerPath": ".omo/ulw-loop/f9daf1d2-f875-438e-8ae2-b93d9acb410c/ledger.jsonl",
+  "codexGoalMode": "aggregate",
+  "goals": [
+    {
+      "id": "G001-nativescheduler-macos-launchser",
+      "title": "NativeScheduler가 현재 실행 중인지 정확히 확인하고, 최신 소스로 macOS 앱 번들을 빌드해 LaunchSer...",
+      "objective": "NativeScheduler가 현재 실행 중인지 정확히 확인하고, 최신 소스로 macOS 앱 번들을 빌드해 LaunchServices가 소유하도록 지속 실행한다. 같은 실제 프로세스에서 노치 아래 접근 가능한 영역에 마우스를 올리면 패널이 확장되고, 밖으로 이동하면 축소되는 것을 owner-window 캡처로 검증한다. 사용자가 직접 점검할 수 있도록 최종 앱은 축소 상태로 계속 실행해 둔다.",
+      "status": "complete",
+      "successCriteria": [
+        {
+          "id": "C001",
+          "scenario": "Computer-use launch happy path: first capture RED with pgrep -x NativeScheduler and a CoreGraphics owner-window query showing no process/window. Build the current Xcode project with xcodebuild -project NativeScheduler/NativeScheduler.xcodeproj -scheme NativeScheduler -configuration Debug -derivedDataPath /Users/chan/Library/Developer/Xcode/DerivedData/NativeScheduler-Handoff build, then run open -n /Users/chan/Library/Developer/Xcode/DerivedData/NativeScheduler-Handoff/Build/Products/Debug/NativeScheduler.app. After open returns and 5 seconds elapse, PASS iff exactly one NativeScheduler PID remains, ps executable path is inside that exact app bundle, CoreGraphics reports an on-screen 816x404 owner window, owner-only collapsed capture is 440x76, and the PID is alive.",
+          "userModel": "happy",
+          "expectedEvidence": "Current attempt C001-launch.log plus C001-collapsed.png, bundle/binary SHA-256, PID/path/window metadata, and RED prelaunch no-PID/no-window proof. Cleanup: no QA-only process is created; the single LaunchServices app PID is the requested handoff deliverable and must remain.",
+          "essential": true,
+          "capturedEvidence": ".omo/evidence/ulw/f9daf1d2-f875-438e-8ae2-b93d9acb410c/G001-nativescheduler-macos-launchser/a1/C001-launch.log; .omo/evidence/ulw/f9daf1d2-f875-438e-8ae2-b93d9acb410c/G001-nativescheduler-macos-launchser/a1/C001-xcodebuild.log; .omo/evidence/ulw/f9daf1d2-f875-438e-8ae2-b93d9acb410c/G001-nativescheduler-macos-launchser/a1/C001-collapsed.png",
+          "status": "pass",
+          "capturedAt": "2026-08-02T03:07:01.718Z",
+          "notes": "RED no PID/window; current Xcode app build exit 0; open -n exit 0; exactly one PID 90771 with PPID 1 and exact Handoff bundle path; CGWindow 816x404; owner-only collapsed capture 440x76."
+        },
+        {
+          "id": "C002",
+          "scenario": "Computer-use hover edge path on the exact C001 PID/window: compile one temporary CoreGraphics helper that uses CGWarpMouseCursorPosition plus CGEvent(mouseMoved). Cross Quartz (960,59) outside to (960,57) inside, then park at reachable (960,40), wait 700ms, and run screencapture -x -l <windowID>. PASS iff the owner-only PNG is 1632x768 or 1632x808 with complete live Tasks, heatmap, timer, controls, and unclipped Korean text. Move to Quartz (80,800), wait 700ms, capture again; PASS iff 440x76 and the same PID remains alive. RED is the prelaunch state where no NativeScheduler window exists, so hover cannot produce an expanded owner capture.",
+          "userModel": "edge",
+          "expectedEvidence": "Current attempt C002-hover.log, C002-expanded.png and C002-collapsed.png with exact dimensions/SHA-256, same-PID liveness, direct visual inspection, and cleanup receipt proving pointer restored and temporary helper directory absent.",
+          "essential": true,
+          "capturedEvidence": ".omo/evidence/ulw/f9daf1d2-f875-438e-8ae2-b93d9acb410c/G001-nativescheduler-macos-launchser/a1/C002-hover.log; .omo/evidence/ulw/f9daf1d2-f875-438e-8ae2-b93d9acb410c/G001-nativescheduler-macos-launchser/a1/C002-expanded.png; .omo/evidence/ulw/f9daf1d2-f875-438e-8ae2-b93d9acb410c/G001-nativescheduler-macos-launchser/a1/C002-collapsed.png; .omo/evidence/ulw/f9daf1d2-f875-438e-8ae2-b93d9acb410c/G001-nativescheduler-macos-launchser/a1/C002-worker.log; .omo/evidence/ulw/f9daf1d2-f875-438e-8ae2-b93d9acb410c/G001-nativescheduler-macos-launchser/a1/C002-worker-expanded.png; .omo/evidence/ulw/f9daf1d2-f875-438e-8ae2-b93d9acb410c/G001-nativescheduler-macos-launchser/a1/C002-worker-collapsed.png; .omo/evidence/ulw/f9daf1d2-f875-438e-8ae2-b93d9acb410c/G001-nativescheduler-macos-launchser/a1/G001-nativescheduler-macos-launchser-manual-qa.md",
+          "status": "pass",
+          "capturedAt": "2026-08-02T03:15:35.967Z",
+          "notes": "PASS twice on PID 90771: OS pointer boundary crossing expanded to 1632x808, outside exit collapsed to 440x76, complete Tasks/heatmap/timer/Korean UI, same PID alive. Pointer restored exactly; /tmp helper absent; helper process count 0."
+        },
+        {
+          "id": "C003",
+          "scenario": "Adjacent lifecycle regression after C002 cleanup: with the temporary helper deleted and pointer restored outside the panel, wait at least 10 seconds after the last QA command and re-query pgrep, ps executable path, CoreGraphics window, and an owner-only screenshot. PASS iff exactly the same LaunchServices PID is alive from the current Handoff app bundle, its owner capture is collapsed 440x76, and no old raw SwiftPM PID, QA helper, or temporary capture remains. If production source changed, additionally require swift test --package-path NativeScheduler and both SwiftPM/Xcode builds exit 0.",
+          "userModel": "regression",
+          "expectedEvidence": "Current attempt C003-handoff.log and C003-final-collapsed.png with PID/path/window/hash plus bounded absence checks for QA helper/temp and any second NativeScheduler process. This proves the app remains available for the user after orchestration finishes.",
+          "essential": false,
+          "capturedEvidence": ".omo/evidence/ulw/f9daf1d2-f875-438e-8ae2-b93d9acb410c/G001-nativescheduler-macos-launchser/a1/C003-handoff.log; .omo/evidence/ulw/f9daf1d2-f875-438e-8ae2-b93d9acb410c/G001-nativescheduler-macos-launchser/a1/C003-final-collapsed.png; .omo/evidence/ulw/f9daf1d2-f875-438e-8ae2-b93d9acb410c/G001-nativescheduler-macos-launchser/a1/G001-nativescheduler-macos-launchser-manual-qa.md",
+          "status": "pass",
+          "capturedAt": "2026-08-02T03:17:01.447Z",
+          "notes": "After 10s: exactly same PID 90771, PPID 1, exact Handoff path, window 816x404, collapsed capture 440x76. No prior PID, raw SwiftPM process, qa_helper process, or /tmp helper directory. App remains alive for user."
+        }
+      ],
+      "attempt": 1,
+      "createdAt": "2026-08-02T02:59:18.020Z",
+      "updatedAt": "2026-08-02T03:29:32.092Z",
+      "startedAt": "2026-08-02T03:02:23.232Z",
+      "completedAt": "2026-08-02T03:29:32.092Z",
+      "evidence": "C001 current Xcode build and LaunchServices PID/path/window/collapsed proof PASS; C002 two same-PID OS-pointer expansion/exit runs with complete Korean UI and cleanup PASS; C003 10-second persistent collapsed handoff with no stale raw/helper/temp/journal residue PASS; code review APPROVE/WATCH blockers []; manual QA PASS; gate review APPROVE."
+    }
+  ],
+  "codexObjective": "Complete the durable ulw-loop plan in .omo/ulw-loop/f9daf1d2-f875-438e-8ae2-b93d9acb410c/goals.json, including later accepted/appended stories, under the original brief constraints; use .omo/ulw-loop/f9daf1d2-f875-438e-8ae2-b93d9acb410c/ledger.jsonl as the audit trail.",
+  "aggregateCompletion": {
+    "status": "complete",
+    "completedAt": "2026-08-02T03:29:32.092Z",
+    "evidence": "C001 current Xcode build and LaunchServices PID/path/window/collapsed proof PASS; C002 two same-PID OS-pointer expansion/exit runs with complete Korean UI and cleanup PASS; C003 10-second persistent collapsed handoff with no stale raw/helper/temp/journal residue PASS; code review APPROVE/WATCH blockers []; manual QA PASS; gate review APPROVE.",
+    "codexGoal": {
+      "goal": {
+        "threadId": "019fb80d-4b1e-7bb1-bf4f-bc778139fd54",
+        "objective": "Complete the durable ulw-loop plan in .omo/ulw-loop/f9daf1d2-f875-438e-8ae2-b93d9acb410c/goals.json, including later accepted/appended stories, under the original brief constraints; use .omo/ulw-loop/f9daf1d2-f875-438e-8ae2-b93d9acb410c/ledger.jsonl as the audit trail.",
+        "status": "complete",
+        "tokensUsed": 0,
+        "timeUsedSeconds": 3,
+        "createdAt": 1785641269,
+        "updatedAt": 1785641273
+      },
+      "remainingTokens": null,
+      "completionBudgetReport": null
+    }
+  }
+}

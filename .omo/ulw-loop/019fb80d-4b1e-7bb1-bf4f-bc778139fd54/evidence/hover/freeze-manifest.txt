@@ -1,0 +1,19 @@
+2026-08-02 HEAVY review freeze manifest
+tree_identity=@tree:unborn-untracked
+git_rev_parse_HEAD=unavailable (repository has no HEAD)
+git_status_scope=?? native_schedular/
+No commit created.
+
+source_sha256:
+890c5daa5cd2e49e3958d261d7352f549c9fe2c5d8822282c3b84f37ed1d82ec  NativeScheduler/Sources/NativeScheduler/Features/FloatingPanel/NotchWindow.swift
+7fd5430ccf291e89011c3864da65776f0cc27a21133b992705ccb8c6c46c4ef7  NativeScheduler/Sources/NativeScheduler/Features/FloatingPanel/NotchView.swift
+26e56e4dd06db0ef1869cc1f512d7c3ae9bb492f401643b18a1b4ba560d4e68d  NativeScheduler/Tests/NativeSchedulerTests/NotchShellTests.swift
+4358124481925bbf403a401098b7ada12a6f7f05628240ee5cb4e41ac81c3609  NativeScheduler/.build/arm64-apple-macosx/debug/NativeScheduler
+
+parent_verification:
+C001=PASS 1632x768 live UI; process alive
+C002=PASS expanded 1632x808 -> collapsed 440x76; process alive
+C003=PASS all 3 cycles alternated 1632x808 -> 440x76; process alive; final expanded visual unclipped
+tests=PASS 33/33
+build=PASS
+cleanup=PASS

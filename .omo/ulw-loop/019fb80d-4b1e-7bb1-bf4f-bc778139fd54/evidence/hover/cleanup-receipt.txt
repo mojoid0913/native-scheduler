@@ -1,0 +1,7 @@
+2026-08-02 parent QA cleanup
+QA app PID 53558: absent (ps exit 1)
+All NativeScheduler QA processes: absent (pgrep exit 1)
+Pointer restored: quartz=1722,398 appkit=1722,845
+Deleted temporary files: /tmp/native-scheduler-ulw-hover/HoverProbe.swift and /tmp/native-scheduler-ulw-hover/hover_probe
+Removed temporary directory: /tmp/native-scheduler-ulw-hover
+Absence check: test -e /tmp/native-scheduler-ulw-hover exited 1

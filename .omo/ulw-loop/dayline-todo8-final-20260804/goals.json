@@ -1,0 +1,103 @@
+{
+  "version": 1,
+  "evidenceLayoutVersion": 2,
+  "createdAt": "2026-08-04T10:23:47.740Z",
+  "updatedAt": "2026-08-09T08:36:10.173Z",
+  "briefPath": ".omo/ulw-loop/dayline-todo8-final-20260804/brief.md",
+  "goalsPath": ".omo/ulw-loop/dayline-todo8-final-20260804/goals.json",
+  "ledgerPath": ".omo/ulw-loop/dayline-todo8-final-20260804/ledger.jsonl",
+  "codexGoalMode": "aggregate",
+  "goals": [
+    {
+      "id": "G001-resume-the-approved-omo-plans-daily",
+      "title": "Resume the approved .omo/plans/daily-time-narrative-redesign.md start...",
+      "objective": "Resume the approved .omo/plans/daily-time-narrative-redesign.md start-work run without changing completed Todos 1-7. Finish Todo 8 from the current persistent pointer harness: prove the user's genuine clicks select the inactive blue 집중 작업 09:00-09:45 segment and update its detail while the same PID remains responsive; then prove Enter and Space pinning, focus/AX semantics, visual/CJK states, and real macOS Reduce Motion behavior. Complete independent adversarial verification, dual visual QA, Todo 8 cleanup, and final verification F1-F4. Preserve the frozen 40-file source digest boundary unless a confirmed product defect requires a failing-first minimal fix. Finish with the correct collapsed NativeScheduler app running for user inspection.",
+      "status": "blocked",
+      "successCriteria": [
+        {
+          "id": "C001",
+          "scenario": "Computer-use happy path against live task-local HumanPointerPersistent.app PID 92574/window 6567 immediately after the user's 3-4 genuine clicks: read task-local event/state files, run only the bounded external AX reader in a separate watchdog process, and capture the owned window. PASS iff same-PID mouse counters increased, onPin is at least 1, pinned and detail identity is inactive blue 집중 작업 09:00-09:45 rather than active orange 회의, heartbeat advances after inspection, selected/detail UI is visibly rendered without spinner or CJK defects, the canonical 40-file drift is zero, and cleanup proves PID/window/helpers gone; otherwise FAIL and preserve the app when input evidence is absent.",
+          "userModel": "happy",
+          "expectedEvidence": ".omo/evidence/start-work/daily-time-narrative-redesign/a1/task-8-human-c-pointer-doneclaim.md plus fresh state/event files, selected owner-window PNG, main-thread sample, frozen-drift check, and cleanup receipt. RED is task-8-human-b-final-responsive-ready.md explicitly ARMED with no click pass; GREEN is the post-click same-PID artifact set.",
+          "essential": true,
+          "capturedEvidence": ".omo/evidence/start-work/daily-time-narrative-redesign/a1/task-8-human-e-genuine-click-fullydone.md + task-8-human-e-genuine-click-adversarial-verify.md: clean zero baseline transitioned through exactly one successful DAYLINE_ON_PIN to exact blue 집중 작업 pinned/detail ID; fresh CJK render and AX Selected matched; heartbeat live; frozen 40-file digest a2b26289b57a3e537ffc3b03ec0351b0abbc174ba70c154d36d9b0c8dc2c9f70 drift0 @tree:unborn-untracked | cleanup: STOP accepted; launchd label com.native_schedular.c001humanpointere removed; PID54967/window6901/old PIDs/observer/helpers absent",
+          "status": "pass",
+          "capturedAt": "2026-08-04T12:51:26.013Z",
+          "notes": "Authoritative Todo 8 click-to-pin criterion independently confirmed at 0.98. Earlier activation/nonpin events limit source provenance precision but the unique successful local down/up to DAYLINE_ON_PIN transition and user claim prove the functional mouse path."
+        },
+        {
+          "id": "C002",
+          "scenario": "Computer-use accessibility edge scenario against fresh task-local persistent hosts: send genuine Tab/Shift-Tab plus Enter and Space to inactive Dayline blocks, invoke the exposed accessibility reset action, inspect bounded external AX role/name/value/action order, then run expansion/selection/live update with the effective macOS Reduce Motion value true and restore every recorded setting. PASS iff Enter and Space each pin the intended block, visible focus and chronological order match the contract, reset restores active-or-most-recent detail, each segment exposes category/range/duration/active state with decorative nodes hidden, Reduce Motion removes nonessential motion while preserving static states, heartbeat remains responsive, screenshots/CJK pass, and settings/runtime cleanup is proven.",
+          "userModel": "edge",
+          "expectedEvidence": ".omo/evidence/start-work/daily-time-narrative-redesign/a1/task-8-keyboard-accessibility.txt, fresh keyboard/focus PNGs, task-8-reduced-motion.mov or timestamped rest/mid/settled frames, bounded AX dump, settings before/after proof, and cleanup receipts. RED is prior task-8-r5 evidence where genuine key delivery and effective Reduce Motion could not be established; GREEN requires fresh valid hosts and the effective OS value.",
+          "essential": true,
+          "capturedEvidence": ".omo/evidence/start-work/daily-time-narrative-redesign/a1/task-8-c002-screen-recording-reset-incident.md: unintended tccutil reset ScreenCapture exited 0 before any C002 host launch; no nonprompting before/after Screen Recording grant state was captured, so restoration cannot be automated or inferred @tree:unborn-untracked | cleanup: no persistent QA host/window/launchd label/lease/settings mutation beyond TCC reset; temporary preflight probe removed; no product/persistence changes",
+          "status": "blocked",
+          "capturedAt": "2026-08-04T12:56:09.167Z",
+          "notes": "User must manually restore Screen & System Audio Recording permission for the capture client in System Settings. No automatic grant, CGRequest, Settings launch, or second TCC mutation attempted."
+        },
+        {
+          "id": "C003",
+          "scenario": "Final regression and handoff: run F1 plan-compliance and F2 code-quality/security read-only reviews in parallel, then F3 fresh exact-app manual/visual QA, then F4 independent scope/runtime debugging audit. PASS iff Todo 8 plus F1-F4 are unconditional at one frozen source digest, all required tests/builds and production-state isolation pass, no stale checkerboard/evidence is accepted, all temporary QA state is cleaned, and the only retained runtime is the exact verified NativeScheduler app visibly collapsed for user inspection with PID/path/payload recorded.",
+          "userModel": "regression",
+          "expectedEvidence": ".omo/evidence/start-work/daily-time-narrative-redesign/a1/F1-plan-compliance.md, F2-code-quality-security.md, F3-manual-qa.md, two fresh F3 visual reports, F4-scope-runtime-audit.md, final collapsed PID/provenance, and plan/Boulder/start-work/ulw-loop completion records. RED is current Todo 8 and F1-F4 unchecked with no valid final collapsed handoff; GREEN is the complete frozen-tree gate.",
+          "essential": false,
+          "capturedEvidence": null,
+          "status": "pending"
+        }
+      ],
+      "attempt": 1,
+      "createdAt": "2026-08-04T10:23:47.740Z",
+      "updatedAt": "2026-08-09T01:18:51.342Z",
+      "startedAt": "2026-08-04T10:33:38.899Z",
+      "steeringEvidence": "Boulder and signed transfer record designate G002/dayline-five-day-density-timer-truth as the approved successor; old C002 permission incident and C003 final wave are carried forward, not passed.",
+      "steeringRationale": "Prevent the superseded predecessor goal from blocking or being falsely completed; continue through explicit G002 successor evidence.",
+      "steeringStatus": "blocked",
+      "blockedReason": "Prevent the superseded predecessor goal from blocking or being falsely completed; continue through explicit G002 successor evidence."
+    },
+    {
+      "id": "G002",
+      "title": "Complete five-day Dayline exact-app QA and final release gate",
+      "objective": "Execute approved successor .omo/plans/dayline-five-day-density-timer-truth.md at frozen product digest 58150f312cadb8fdf8679891ae0272ce5a9d398538475db316bbd9d217c79331: finish Task 10 exact-app S01-S10 native QA, dual visual reviews, F1-F4, cleanup, and leave only the verified NativeScheduler app running collapsed. Stop right away when every successor criterion is PASS at one frozen digest and all QA state except that handoff app is gone.",
+      "status": "in_progress",
+      "successCriteria": [
+        {
+          "id": "C001",
+          "scenario": "Computer-use happy path: execute the sealed R23 persistent wrapper exactly once against frozen digest 58150f312cadb8fdf8679891ae0272ce5a9d398538475db316bbd9d217c79331. Drive the owned NativeScheduler PID/window through collapsed hover, expanded Dayline, options/category lock, Default blue timer for at least 12 seconds, 10-second checkpoint, pause, stop, and custom orange category. PASS iff five newest-first 24-hour rows, 96pt timer/summary, shared axis/detail, matching timer/notch/Dayline colors, bounded tick/checkpoint records, responsive PID, exact layout proposal, and no product-state mutation are all captured; FAIL on any missing state, wrong color, clipping, spinner, crash, extra save/fetch, or digest drift.",
+          "userModel": "happy",
+          "expectedEvidence": ".omo/evidence/start-work/dayline-five-day-density-timer-truth/a1/task-10-native-qa.md plus R23 live terminal manifest, task-10-layout-probe.json, compact/expanded/default/custom/checkpoint owner-window captures, event/state receipts, exact digest, and cleanup receipt. RED chain is sealed R21 authorization and R22 helper-root terminal boundaries; GREEN requires the actual GUI surface.",
+          "essential": true,
+          "capturedEvidence": "R23 sealed wrapper ran exactly once and stopped before S01-S10: terminal manifest SHA256 8c0d8ea61ec7f3053523fb9ae61f205f6fad0edd1fcc28fd4513a2bb323e71a6, boundary missing external direct-launch journal/cleanup; H44/H45/H46 then confirmed copied launcher escaped to original R21 runner/root. @tree:unborn-untracked | cleanup: ownedProcessesRemaining=0; ownedTemporarySanitizerInputsRemaining=0; rawArchiveArtifactsRemaining=0; staleExternalTaskRootCount=0; residualSensitive=0; rawRetained=false",
+          "status": "fail",
+          "capturedAt": "2026-08-09T08:36:10.173Z",
+          "notes": "Criterion remains RED. Root cause is R23 copied-closure absolute-path escape, not product behavior. R24 self-contained closure required; no retry counted as R23."
+        },
+        {
+          "id": "C002",
+          "scenario": "Computer-use edge and adversarial path on the same exact bundle: verify empty, DST, and many-category five-day states; keyboard Tab/Shift-Tab plus Enter/Space pinning; bounded AX role/name/value/action order; Reduce Motion static-state behavior; kill after a durable checkpoint then relaunch after delay. PASS iff legacy/unauthoritative rows never grow, offline time is capped, keyboard and AX select the intended segment, CJK is unclipped, settings and production SQLite/preferences/TCC hashes are unchanged, and all owned PIDs/helpers/temp roots are cleaned; FAIL on stale screenshot, inferred permission, offline growth, missing row, wrong order, or leftover state.",
+          "userModel": "edge",
+          "expectedEvidence": ".omo/evidence/start-work/dayline-five-day-density-timer-truth/a1/task-10-relaunch.json, empty/DST/many-category/keyboard/AX/Reduce-Motion owner-window artifacts, production-state before-after hashes, sanitizer result, and task-10-cleanup.txt. RED references historical C002 capture-permission block and unauthoritative nil-row risk; GREEN requires fresh isolated exact-app evidence.",
+          "essential": true,
+          "capturedEvidence": null,
+          "status": "pending"
+        },
+        {
+          "id": "C003",
+          "scenario": "Final regression and handoff at one frozen recursive digest: run independent Task10 evidence verification and two visual reviews; F1 plan compliance and F2 code-quality/security in parallel; F3 fresh exact-app manual QA; F4 scope/manifest/runtime debugging audit; then the five-lane review-work gate. PASS iff every Must/Must-NOT and Task10/F1-F4 item has current evidence, SwiftPM/Xcode gates remain green, no product/source drift or unowned state exists, all reviewers unconditionally approve, and only the exact verified NativeScheduler PID remains visibly collapsed; FAIL on timeout, stale/missing artifact, conditional verdict, digest mismatch, stray process/port/temp, or wrong final state.",
+          "userModel": "regression",
+          "expectedEvidence": ".omo/evidence/start-work/dayline-five-day-density-timer-truth/a1/task-10-visual-a.md, task-10-visual-b.md, F1-plan-compliance.md, F2-code-quality.md, F3-real-qa.md, F4-scope-manifest.md, final review/debug lane reports, final collapsed PID/path/digest receipt, plan/Boulder/start-work/ULW completion records. RED is Task10/F1-F4 unchecked; GREEN is aggregate completion.",
+          "essential": false,
+          "capturedEvidence": null,
+          "status": "pending"
+        }
+      ],
+      "attempt": 1,
+      "createdAt": "2026-08-09T01:18:37.103Z",
+      "updatedAt": "2026-08-09T08:36:10.173Z",
+      "evidence": "Boulder transfer record marks daily-time-narrative-redesign superseded-incomplete and transfers Task8/F1-F4; Tasks1-9 of successor are complete; R23 corrected construction and independent review are sealed and user supplied fresh execution approval.",
+      "startedAt": "2026-08-09T01:19:46.075Z"
+    }
+  ],
+  "codexObjective": "Complete the durable ulw-loop plan in .omo/ulw-loop/dayline-todo8-final-20260804/goals.json, including later accepted/appended stories, under the original brief constraints; use .omo/ulw-loop/dayline-todo8-final-20260804/ledger.jsonl as the audit trail.",
+  "activeGoalId": "G002"
+}

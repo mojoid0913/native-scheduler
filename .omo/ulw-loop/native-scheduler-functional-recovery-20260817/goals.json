@@ -1,0 +1,73 @@
+{
+  "version": 1,
+  "evidenceLayoutVersion": 2,
+  "createdAt": "2026-08-16T19:39:55.768Z",
+  "updatedAt": "2026-08-16T20:39:08.679Z",
+  "briefPath": ".omo/ulw-loop/native-scheduler-functional-recovery-20260817/brief.md",
+  "goalsPath": ".omo/ulw-loop/native-scheduler-functional-recovery-20260817/goals.json",
+  "ledgerPath": ".omo/ulw-loop/native-scheduler-functional-recovery-20260817/ledger.jsonl",
+  "codexGoalMode": "aggregate",
+  "goals": [
+    {
+      "id": "G001-outcome-the-current-nativescheduler",
+      "title": "Outcome: The current NativeScheduler macOS app keeps the approved dar...",
+      "objective": "Outcome: The current NativeScheduler macOS app keeps the approved dark balanced design while every existing user-facing function is present, connected, and operational in the correct latest executable, which remains running for the user to test. Deliverables: the NativeScheduler source/build only where a confirmed regression requires repair, a fresh Debug app build, and observable evidence under .omo/evidence/functional-recovery. Success criteria: (1) establish a source-and-history-backed feature inventory and reproduce why the previously launched build looked design-only; (2) through computer-use on the real app, prove Tasks add/edit/complete/reorder/persistence behavior and empty-state controls; (3) through computer-use on the real app, prove Timer mode/category/start/pause/resume/stop behavior plus Dayline live detail and expand/collapse behavior; (4) through computer-use on the real app, prove shell Settings opens and category/settings interactions remain available; (5) Swift diagnostics, targeted tests, app build, and a final fresh launch are clean, with every criterion evidenced by non-empty screenshots/action logs. Scope bounds: preserve the current visual design and proportions; do not redesign, delete user data, modify unrelated functionality, use destructive git commands, or create commits without explicit user authorization. If source already contains a function but the wrong/stale/test-isolated executable caused the symptom, fix the launch path rather than rewriting the feature. I will stop right away when all inventoried existing functions pass their real-app scenarios in the latest design build and that verified app is left running for the user.",
+      "status": "complete",
+      "successCriteria": [
+        {
+          "id": "C001",
+          "scenario": "Auxiliary CLI/source scenario: capture running PID executable path and hashes; enumerate every current user control and its action/persistence wiring from source/tests; compare SwiftPM and Xcode products; reproduce the design-only report against the running app AX tree and isolated/user data state. PASS only when one evidence-backed root cause is confirmed or the symptom is precisely reclassified with all competing launch hypotheses refuted.",
+          "userModel": "happy",
+          "expectedEvidence": "Non-empty .omo/evidence/ulw/native-scheduler-functional-recovery-20260817/G001-outcome-the-current-nativescheduler/a1/C001/inventory.json plus baseline-ax.txt and baseline.png in the same C001 directory, containing file:line implementation references, PID executable path, artifact hashes, data-state observation, and confirmed/refuted hypotheses.",
+          "essential": true,
+          "capturedEvidence": "expanded.png is the same PID 49006 after top-notch hover and visibly shows persisted Tasks/folders/completed rows, Dayline history/legacy warning, Timer controls/category, disclosure rail, and Settings gear. @tree:unborn-no-head | cleanup: hover-only; no user data changed.",
+          "status": "pass",
+          "capturedAt": "2026-08-16T19:46:21.543Z"
+        },
+        {
+          "id": "C002",
+          "scenario": "Computer-use happy-path scenario on an isolated real Debug app: expand shell; type a task title and press Enter; PASS only if that exact row and active count update immediately in the same submitted interaction without focus loss or a second action; then rename/reorder/complete/reopen/delete tasks and folders; switch timer mode, adjust duration/end time, add/select category, start/pause/resume/stop; inspect live Dayline detail and toggle compact/expanded. Every inventoried Tasks/Timer/Dayline action must change visible or persisted state exactly once without changing the approved design.",
+          "userModel": "edge",
+          "expectedEvidence": "Non-empty C002/action-log.txt, ordered Tasks/Timer/Dayline screenshots, and persistence-dump.txt under .omo/evidence/ulw/native-scheduler-functional-recovery-20260817/G001-outcome-the-current-nativescheduler/a1; cleanup receipt proves isolated QA process/home stopped and removed.",
+          "essential": true,
+          "capturedEvidence": "07-timer-after-stop.png visibly shows the five-row expanded Dayline, Today summary, live Default segment, and real countdown timer allocation after native disclosure interaction. @tree:unborn-no-head | cleanup: isolated timer/session only.",
+          "status": "pass",
+          "capturedAt": "2026-08-16T20:29:30.432Z"
+        },
+        {
+          "id": "C003",
+          "scenario": "Computer-use regression/adversarial scenario: from empty isolated state open shell Settings, verify close, launch-at-login/default duration/default mode controls and category add/edit/delete confirmation without altering the user profile; relaunch to verify persisted safe settings/category state; run Swift diagnostics, focused tests, full package tests, and fresh Xcode Debug build; launch the verified user-profile app and confirm the current balanced design and all controls remain available. PASS only if all change-caused checks are clean and any unrelated pre-existing failure is independently reproduced and documented.",
+          "userModel": "regression",
+          "expectedEvidence": "Non-empty C003/settings-action-log.txt, settings/relaunch/final-app screenshots, diagnostics.txt, focused-tests.txt, full-tests.txt, xcode-build.txt, binary-provenance.txt, and cleanup receipt under .omo/evidence/ulw/native-scheduler-functional-recovery-20260817/G001-outcome-the-current-nativescheduler/a1; final verified user app PID remains running after evidence recording.",
+          "essential": false,
+          "capturedEvidence": "Fresh independent reviewer st_01a00c46 reports PASS with no functional findings after source, project registration, focused test, C001-C003 evidence, full-suite classification, and final build review. @tree:unborn-no-head | cleanup: read-only reviewer; final user app PID 74450 remains running.",
+          "status": "pass",
+          "capturedAt": "2026-08-16T20:33:55.379Z"
+        }
+      ],
+      "attempt": 1,
+      "createdAt": "2026-08-16T19:39:55.768Z",
+      "updatedAt": "2026-08-16T20:39:08.679Z",
+      "startedAt": "2026-08-16T19:42:49.493Z",
+      "completedAt": "2026-08-16T20:39:08.679Z",
+      "evidence": "C001 proved collapsed-shell root cause and current production/data provenance. C002 real-app QA passed Task Enter/create/complete/reopen/delete, Timer lifecycle, and Dayline disclosure with isolated cleanup. C003 final build passed, PID 74450 is running, and reviewer st_01a00c46 approved with no findings. Full suite 109/111 with two unrelated documented NotchShell failures."
+    }
+  ],
+  "codexObjective": "Complete the durable ulw-loop plan in .omo/ulw-loop/native-scheduler-functional-recovery-20260817/goals.json, including later accepted/appended stories, under the original brief constraints; use .omo/ulw-loop/native-scheduler-functional-recovery-20260817/ledger.jsonl as the audit trail.",
+  "aggregateCompletion": {
+    "status": "complete",
+    "completedAt": "2026-08-16T20:39:08.679Z",
+    "evidence": "C001 proved collapsed-shell root cause and current production/data provenance. C002 real-app QA passed Task Enter/create/complete/reopen/delete, Timer lifecycle, and Dayline disclosure with isolated cleanup. C003 final build passed, PID 74450 is running, and reviewer st_01a00c46 approved with no findings. Full suite 109/111 with two unrelated documented NotchShell failures.",
+    "codexGoal": {
+      "goal": {
+        "threadId": "01a00bc1-843f-7665-a2a7-7eca9a52e4d3",
+        "objective": "Complete the durable ulw-loop plan in .omo/ulw-loop/native-scheduler-functional-recovery-20260817/goals.json, including later accepted/appended stories, under the original brief constraints; use .omo/ulw-loop/native-scheduler-functional-recovery-20260817/ledger.jsonl as the audit trail.",
+        "status": "complete",
+        "tokensUsed": 3772401,
+        "timeUsedSeconds": 3206,
+        "createdAt": 1786909377,
+        "updatedAt": 1786912584
+      }
+    }
+  }
+}

@@ -1,0 +1,4 @@
+- Use only this project's dedicated Android AVD.
+- Never use, stop, reset, or modify another project's AVD.
+- Start the AVD only when device QA is required.
+- Preserve Quick Boot; do not use `-no-snapshot-load` or `-no-snapshot-save`.

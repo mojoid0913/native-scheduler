@@ -1,0 +1,4 @@
+pid_before_cleanup=26646
+window_id=80740
+window_bounds=552,0,816,404
+owner_only_capture=screencapture -x -l 80740

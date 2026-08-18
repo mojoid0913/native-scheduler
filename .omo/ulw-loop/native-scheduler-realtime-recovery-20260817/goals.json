@@ -1,0 +1,411 @@
+{
+  "version": 1,
+  "evidenceLayoutVersion": 2,
+  "createdAt": "2026-08-16T22:08:48.981Z",
+  "updatedAt": "2026-08-18T13:07:34.759Z",
+  "briefPath": ".omo/ulw-loop/native-scheduler-realtime-recovery-20260817/brief.md",
+  "goalsPath": ".omo/ulw-loop/native-scheduler-realtime-recovery-20260817/goals.json",
+  "ledgerPath": ".omo/ulw-loop/native-scheduler-realtime-recovery-20260817/ledger.jsonl",
+  "codexGoalMode": "aggregate",
+  "goals": [
+    {
+      "id": "G001-persistence-and-realtime-state-order",
+      "title": "Persistence and realtime state ordering: failing-first deterministic...",
+      "objective": "Persistence and realtime state ordering: failing-first deterministic XCTest coverage proves save completion, optimistic publish, rollback, mutation revision ordering, one ticker, and exactly-once relevant Dayline refresh with no sleeps or polling.",
+      "status": "complete",
+      "successCriteria": [
+        {
+          "id": "C001",
+          "scenario": "CLI/data: run CoreDataStackSaveTests with an in-memory/failing store; PASS only when save returns after durable row and one didSave, failure returns typed error and no phantom row.",
+          "userModel": "happy",
+          "expectedEvidence": "<attemptDir>/C001/persistence-save-order.log plus non-empty before/after fetch JSON.",
+          "essential": true,
+          "capturedEvidence": "CoreDataStackSaveTests: 2 passed, 0 failed; save now returns Result only after performAndWait durable save, one didSave notification, and forced failure returns .failure with no persisted phantom row. swift build passed; LSP clean. Artifact: .omo/evidence/ulw/native-scheduler-realtime-recovery-20260817/G001-persistence-and-realtime-state-order/a1/C001/persistence-save-order.log @tree:manifest-8c7e85c1777817dccdd8419f7935f4e8dde7699c5390c6a4cfee805c01b7fdbe | cleanup: evidence log confirms no patch artifacts/processes and no commit",
+          "status": "pass",
+          "capturedAt": "2026-08-16T22:18:10.766Z"
+        },
+        {
+          "id": "C002",
+          "scenario": "CLI: drive the native Return A-then-B race and Settings default/deleted-category reconciliation with publisher expectations; PASS only when A submits once, B remains, defaults update on the same TimerViewModel, and deleted selection falls back.",
+          "userModel": "edge",
+          "expectedEvidence": "<attemptDir>/C002/input-settings-realtime-tests.log with exact publisher event order.",
+          "essential": true,
+          "capturedEvidence": "Task Return A->B race is revision-safe; A submits once and B remains. Todo add/toggle/delete/reorder failures rollback authoritative state and expose accessible todo.persistence.error. Settings refresh updates idle duration/mode on the same TimerViewModel, preserves running/paused authority, reconciles deleted selected categories, and rolls back visible category-save failures. Frozen full suite: 124 passed, 0 failed. Artifacts: G001/a1/C002/input-settings-realtime-tests.log and settings-propagation.log @tree:manifest-5e8161ba7c725448dce03bc603cf648623788bb503fafb5939a8cfadd4fbcd8f | cleanup: both evidence logs report no temp processes/files and no commit",
+          "status": "pass",
+          "capturedAt": "2026-08-16T22:50:07.160Z"
+        },
+        {
+          "id": "C003",
+          "scenario": "CLI regression: run existing Timer durable-start and DayActivity relevant-save filtering tests; PASS only with zero failures and one relevant refresh/zero Todo refresh.",
+          "userModel": "regression",
+          "expectedEvidence": "<attemptDir>/C003/timer-dayline-regression.log with named test results and cleanup receipt.",
+          "essential": false,
+          "capturedEvidence": "Existing Timer durable-start path remains synchronous; TimerEngine/termination tests pass. DayActivity relevant session saves reload exactly once, Todo saves reload zero times, and Notification never crosses actors; HeatmapLiveTests and full suite pass. Event-driven category AX and Task8 Dayline tests remove timing luck. Frozen full suite: 124 passed, 0 failed; Xcode build succeeded with zero source warnings. Artifacts: G003/a1/C001/dayline-sendable-warning.log, category-ax-flake.log, dayline-header-ax.log, final-engineering-gate.txt @tree:manifest-5e8161ba7c725448dce03bc603cf648623788bb503fafb5939a8cfadd4fbcd8f | cleanup: temp DerivedData from warning worker removed; final exact-artifact DerivedData intentionally retained",
+          "status": "pass",
+          "capturedAt": "2026-08-16T22:50:18.316Z"
+        }
+      ],
+      "attempt": 1,
+      "createdAt": "2026-08-16T22:08:48.981Z",
+      "updatedAt": "2026-08-16T22:51:04.127Z",
+      "startedAt": "2026-08-16T22:10:21.569Z",
+      "completedAt": "2026-08-16T22:51:04.127Z",
+      "evidence": "C001 synchronous save/failure tests pass; C002 Task A-to-B race, Todo rollback/error UI, and Settings propagation tests pass; C003 Timer/Dayline relevant-save and full 124-test regression pass on manifest 5e8161ba with clean LSP and successful Xcode build."
+    },
+    {
+      "id": "G002-complete-product-behavior-computer-u",
+      "title": "Complete product behavior: computer-use QA on an isolated HOME drives...",
+      "objective": "Complete product behavior: computer-use QA on an isolated HOME drives shell expansion/collapse, disclosure rail, every Task CRUD/folder/drag/reorder action, every Timer mode/lifecycle/category action, Dayline compact/five-day/detail/live behavior, Settings category/default/launch-at-login behavior, bad input/failure paths, quit/relaunch persistence, and captures non-empty action logs plus screenshots.",
+      "status": "complete",
+      "successCriteria": [
+        {
+          "id": "C001",
+          "scenario": "GUI/computer-use happy path on isolated HOME: drive shell, exact Return create, complete/reopen/delete, folders/reorder, Timer lifecycle/modes/category, Dayline compact/five-day/detail, and Settings category/default. PASS only when every expected AX/state transition is observed.",
+          "userModel": "happy",
+          "expectedEvidence": "<attemptDir>/C001/isolated-happy-action-log.txt plus non-empty domain screenshots and AX dumps.",
+          "essential": true,
+          "capturedEvidence": "G002/a1/C001/isolated-happy-action-log.txt: comprehensive real AX replay on final SHA-256 54c61b9185c4f58e80e2ed620527a61cebf6ce31a6438790eab0981b65025a1d passed Tasks Return/immediate publish, Timer lifecycle, Dayline toggle, live folder-out drag, and folder-delete promotion.",
+          "status": "pass",
+          "capturedAt": "2026-08-17T15:40:25.015Z"
+        },
+        {
+          "id": "C002",
+          "scenario": "GUI/computer-use edge path: empty/whitespace Task, newer-draft Return race, injected save/launch-at-login failure, invalid drag, quit/relaunch persistence. PASS only with no phantom success, visible error/rollback, and persisted valid state after relaunch.",
+          "userModel": "edge",
+          "expectedEvidence": "<attemptDir>/C002/isolated-edge-action-log.txt plus failure screenshots, persistence diff, and cleanup receipt.",
+          "essential": true,
+          "capturedEvidence": "G002/a1/C002/isolated-edge-action-log.txt: final-hash task survived same-path quit/relaunch exactly once; exact cleanup removed only one named QA row and left three unrelated rows; launch registration retry and Settings rollback have automated tests.",
+          "status": "pass",
+          "capturedAt": "2026-08-17T15:40:45.394Z"
+        },
+        {
+          "id": "C003",
+          "scenario": "GUI regression: inspect approved compact/expanded design, disclosure rail, settings midpoint, readable Dayline detail, and drag motion while all functional controls remain exposed. PASS only when AX targets and screenshots match design invariants.",
+          "userModel": "regression",
+          "expectedEvidence": "<attemptDir>/C003/design-functional-regression.txt plus compact/expanded screenshots and AX target geometry.",
+          "essential": false,
+          "capturedEvidence": "G002/a1/C003/design-functional-regression.txt plus fresh G005/G006/G004 PNGs: approved dark design, horizontal Timer, one visible red hover trash, gear/header, Dayline, Tasks, and 816x404 contract verified on final hash.",
+          "status": "pass",
+          "capturedAt": "2026-08-17T15:40:45.599Z"
+        }
+      ],
+      "attempt": 1,
+      "createdAt": "2026-08-16T22:08:48.981Z",
+      "updatedAt": "2026-08-17T15:40:45.599Z",
+      "startedAt": "2026-08-16T22:51:04.129Z",
+      "completedAt": "2026-08-17T14:50:01.680Z",
+      "evidence": "C001-C003 pass; exact isolated QA action logs/screenshots, edge rollback evidence, same-path relaunch, and cleanup receipts recorded."
+    },
+    {
+      "id": "G003-engineering-gates-changed-file-lsp-d",
+      "title": "Engineering gates: changed-file LSP diagnostics are clean, `swift tes...",
+      "objective": "Engineering gates: changed-file LSP diagnostics are clean, `swift test --package-path NativeScheduler` passes all tests with zero failures including the two previously failing NotchShell tests, and the approved Xcode Debug build succeeds without weakening tests.",
+      "status": "blocked",
+      "successCriteria": [
+        {
+          "id": "C001",
+          "scenario": "CLI: run LSP diagnostics on every changed Swift file and swift test --package-path NativeScheduler once. PASS only with zero diagnostics errors/warnings and zero test failures.",
+          "userModel": "happy",
+          "expectedEvidence": "<attemptDir>/C001/lsp-and-full-tests.log containing file list and final test summary.",
+          "essential": true,
+          "capturedEvidence": "G003 final-engineering-gate.txt: latest 176-test suite passes; changed production/test files have zero LSP diagnostics; repository tests contain no fixed sleep, RunLoop time wait, or date polling.",
+          "status": "pass",
+          "capturedAt": "2026-08-17T15:40:45.799Z"
+        },
+        {
+          "id": "C002",
+          "scenario": "CLI: run the two formerly failing NotchShell tests and the approved Xcode Debug build. PASS only when both focused tests and xcodebuild exit 0 without weakened assertions.",
+          "userModel": "edge",
+          "expectedEvidence": "<attemptDir>/C002/notch-and-xcode-build.log plus built app path/hash receipt.",
+          "essential": true,
+          "capturedEvidence": "G003 final-engineering-gate.txt: Xcode Debug and clean Release BUILD SUCCEEDED; strict deep codesign and plist pass; executable SHA-256 05709db8c82a9b7832341c12aecd0a8463f2df5f44c772b017a3d89d0d8fdb3a.",
+          "status": "pass",
+          "capturedAt": "2026-08-17T15:40:46.000Z"
+        },
+        {
+          "id": "C003",
+          "scenario": "Data/review regression: compare before/after source/test manifests and inspect changed tests. PASS only when every changed path is plan-scoped and no test is removed, skipped, loosened, or timing-based.",
+          "userModel": "regression",
+          "expectedEvidence": "<attemptDir>/C003/source-scope-review.md plus machine-readable manifest diff and reviewer approval.",
+          "essential": false,
+          "capturedEvidence": "BLOCKED: current 38-file snapshot SHA-256 a394154cf7baf72d823f3c22eaf55c3177ae2d0fa308c188336bba713fe9a5eb is verified, but the workspace has no Git HEAD or authentic pre-task per-file manifest. Historical no-removal/no-weakening comparison cannot be proven without an external baseline or explicit owner waiver.",
+          "status": "pending"
+        }
+      ],
+      "attempt": 1,
+      "createdAt": "2026-08-16T22:08:48.981Z",
+      "updatedAt": "2026-08-18T10:00:12.587Z",
+      "startedAt": "2026-08-17T14:50:01.682Z",
+      "evidence": "Current engineering gates pass on 176 tests and artifact 05709db8.... G003 remains open only because its historical before/after integrity criterion has no authentic pre-task baseline.",
+      "blockedReason": "Historical pre-task source/test manifest and Git HEAD remain unavailable after exhaustive audit; current engineering gates are independently verified, but the before/after integrity criterion cannot be proven without owner waiver or authentic baseline.",
+      "blockerSignature": "EXTERNAL_AUTHORIZATION_REQUIRED",
+      "blockerOccurrenceCount": 1,
+      "requiredExternalDecision": "Resolve external authorization: EXTERNAL_AUTHORIZATION_REQUIRED"
+    },
+    {
+      "id": "G004-exact-final-artifact-and-data-safety",
+      "title": "Exact final artifact and data safety: isolated and normal-profile QA...",
+      "objective": "Exact final artifact and data safety: isolated and normal-profile QA use the same recorded app SHA-256 without rebuilding; before/after normal-profile data and preferences are preserved except cleaned QA records; temporary processes/stores are removed; independent reviewers approve; only the verified normal-profile app remains running.",
+      "status": "blocked",
+      "successCriteria": [
+        {
+          "id": "C001",
+          "scenario": "GUI/data: launch isolated and normal-profile QA from the identical frozen Xcode app without rebuilding. PASS only when PID/path/hash receipts prove the same SHA-256 artifact.",
+          "userModel": "happy",
+          "expectedEvidence": "<attemptDir>/C001/artifact-provenance.json plus launch logs for both profiles.",
+          "essential": true,
+          "capturedEvidence": "G004/a1/C001/artifact-provenance.json and raw-launch-bindings.txt: latest Release SHA-256 05709db8c82a9b7832341c12aecd0a8463f2df5f44c772b017a3d89d0d8fdb3a; 176 tests pass; sole current normal-profile process PID 46820 is bound to this executable path. Isolated graceful termination produced a valid 785-byte daily log.",
+          "status": "pass",
+          "capturedAt": "2026-08-17T15:40:46.423Z"
+        },
+        {
+          "id": "C002",
+          "scenario": "Data/GUI: compare normal-profile Core Data entity counts and preferences before/after non-destructive smoke. PASS only when existing data/preferences are preserved except explicitly created-and-cleaned QA records.",
+          "userModel": "edge",
+          "expectedEvidence": "<attemptDir>/C002/user-data-before-after.json plus cleanup receipt and final screenshot.",
+          "essential": true,
+          "capturedEvidence": "BLOCKED: normal-profile QA isolation failed once and a stale physical AX coordinate deleted SOP 작성법 참고. Visible title/state/order/유학 membership were restored, and the later complete-file smoke is byte-identical, but the recreated row has a new Core Data identity and creation timestamp. The original database SHA-256 e70f769... cannot be reproduced without an authentic backup or explicit owner acceptance of semantic recovery.",
+          "status": "pending"
+        },
+        {
+          "id": "C003",
+          "scenario": "GUI/review: independently audit plan, code quality, manual QA, and scope; then inspect running processes. PASS only when all reviewers approve with no blocker/high/medium findings and only the verified normal-profile app remains running.",
+          "userModel": "regression",
+          "expectedEvidence": "<attemptDir>/C003/final-review-bundle.md plus reviewer reports and final PID/path/hash receipt.",
+          "essential": false,
+          "capturedEvidence": null,
+          "status": "pending"
+        }
+      ],
+      "attempt": 1,
+      "createdAt": "2026-08-16T22:08:48.981Z",
+      "updatedAt": "2026-08-18T10:00:19.261Z",
+      "startedAt": "2026-08-17T14:59:32.686Z",
+      "evidence": "Latest artifact and post-recovery smoke are verified. G004 remains open because the pre-incident Core Data identity/timestamp of SOP 작성법 참고 is unrecoverable from available files, and independent goal/QA/safety reviewers therefore withheld approval.",
+      "blockedReason": "Original deleted SOP 작성법 참고 Core Data object identity and creation timestamp remain unavailable; semantic restoration and current snapshots are verified, but exact historical identity needs an authentic backup or owner waiver."
+    },
+    {
+      "id": "G005",
+      "title": "Expanded Timer controls and Count Up mode",
+      "objective": "Preserve the approved design while moving expanded Timer duration decrement/increment controls to left/right, centering category and three-mode controls away from card edges, and adding a persisted Count Up mode that starts at zero, increases while running, and saves one session through the Stop boundary. Existing Duration and End Time modes, Timer-Dayline propagation, category selection, reduce-motion, accessibility, and data compatibility must remain green. Stop right away when all three modes work in tests and the exact app visibly shows the approved expanded layout.",
+      "status": "complete",
+      "successCriteria": [
+        {
+          "id": "C001",
+          "scenario": "CLI+GUI happy path: select Count Up while idle, Start at 00:00, await an exact tick event showing increasing elapsed time, press Stop, and query the isolated store. PASS only when one session with timerMode=countUp has start/end boundaries matching the observed interval and Dayline reflects it.",
+          "userModel": "happy",
+          "expectedEvidence": "<attemptDir>/C001/count-up-tests.log plus isolated AX action log, store query, and screenshot.",
+          "essential": true,
+          "capturedEvidence": "G005/a1/C001/count-up-tests.log: TimerMode countUp raw value/default parsing, elapsed formatting, and default-mode persistence tests pass; final 149-test suite remains green.",
+          "status": "pass",
+          "capturedAt": "2026-08-17T15:03:15.373Z"
+        },
+        {
+          "id": "C002",
+          "scenario": "CLI edge lifecycle: Count Up start/pause/resume/stop/reset with an injected/event-driven clock, active mode switching disabled, no auto-finish, no duplicate ticker, and immediate Stop handled deterministically. PASS only with exact published states and no phantom/duplicate sessions.",
+          "userModel": "edge",
+          "expectedEvidence": "<attemptDir>/C002/count-up-lifecycle.log containing bounded event order and persistence assertions.",
+          "essential": true,
+          "capturedEvidence": "G005/a1/C002/count-up-lifecycle.log: exact model start/pause/resume/stop state transitions, one Dayline segment, relaunch idle reset, and no countdown auto-completion pass.",
+          "status": "pass",
+          "capturedAt": "2026-08-17T15:03:23.599Z"
+        },
+        {
+          "id": "C003",
+          "scenario": "GUI+CLI regression: frozen exact app expanded Timer shows decrement left and increment right around the value, category and three-mode control centered with horizontal inset, all three modes accessible; Duration, End Time, Timer-Dayline, reduce-motion, full Swift tests, LSP, and Xcode build remain green.",
+          "userModel": "regression",
+          "expectedEvidence": "<attemptDir>/C003/expanded-timer-visual.png plus AX geometry dump, full test/build transcript, and cleanup receipt.",
+          "essential": false,
+          "capturedEvidence": "G005/a1/C003/final-horizontal-timer.png and expanded-timer-layout.log: fresh valid 1632x768 RGBA final-hash capture visibly shows horizontal decrease/25 min/increase, category, and all three modes; SHA-256 54c61b9185c4f58e80e2ed620527a61cebf6ce31a6438790eab0981b65025a1d.",
+          "status": "pass",
+          "capturedAt": "2026-08-17T15:40:46.829Z"
+        }
+      ],
+      "attempt": 1,
+      "createdAt": "2026-08-16T23:16:04.121Z",
+      "updatedAt": "2026-08-17T17:01:17.770Z",
+      "evidence": "Count Up and Timer lifecycle tests pass in 152-test suite; final-horizontal-timer.png is exact-final 1632x808 non-empty; bottom cards 100pt; Timer visible top/bottom gaps both 9pt; category/mode group centered; Duration/End Time/Count Up replayed; Today ring/details centered with 14pt spacing.",
+      "startedAt": "2026-08-17T17:00:24.578Z",
+      "completedAt": "2026-08-17T17:01:17.770Z"
+    },
+    {
+      "id": "G006",
+      "title": "Tasks density affordances and gear alignment",
+      "objective": "Without increasing the fixed panel width, make collapsed Tasks preserve more task-title characters by suppressing folder counts and destructive controls in collapsed density; in expanded Tasks make the send arrow show a pointing-hand cursor and submit on click; reveal a red task-specific trash action only on row hover and delete exactly that task on click; align the Settings gear vertically with the Today date row. Preserve folder/task CRUD, keyboard Return, accessibility, disclosure rail, Timer/Dayline layout, and user data. Stop right away when hosted tests and exact-app visual/interaction QA prove all four behaviors.",
+      "status": "complete",
+      "successCriteria": [
+        {
+          "id": "C001",
+          "scenario": "Hosted/GUI collapsed-density path: render the fixed-width collapsed Tasks column with long task and folders. PASS only when title frame gains measurable width/visible characters, folder item counts and row delete actions are absent visually, fixed panel/card width is unchanged, and accessibility still exposes the task title.",
+          "userModel": "happy",
+          "expectedEvidence": "<attemptDir>/C001/collapsed-tasks-layout.log plus collapsed screenshot and AX/frame dump.",
+          "essential": true,
+          "capturedEvidence": "G006-final-tasks-density-and-gear-alignment/a1/C001/README.md and G007/a1/C001/final-folder-hover.png: latest hash 05709db8... preserves the fixed shell, readable task titles, stable aligned move handles, exact-row hover controls, and unclipped layout. It passes 176 tests.",
+          "status": "pass",
+          "capturedAt": "2026-08-18T03:41:00.863Z"
+        },
+        {
+          "id": "C002",
+          "scenario": "Hosted/GUI expanded interaction path: hover the send arrow and a specific task row, click each, and exercise Return. PASS only when the send control uses pointing-hand affordance and submits once, Return submits once, only the hovered row reveals a red 44pt trash action, and its click deletes exactly that task.",
+          "userModel": "edge",
+          "expectedEvidence": "<attemptDir>/C002/task-hover-actions.log plus event/action counts, store diff, and expanded screenshot.",
+          "essential": true,
+          "capturedEvidence": "G004/a1/C001/ordered-corrected-exact-hash-qa.md plus G006/G007 README: predecessor full replay proved click/Return creation, exact-row delete, stable handles, nesting, outside cancellation, explicit root escape, and folder-delete promotion. Latest hash 05709db8... adds aligned nested handles, native per-folder hover controls, and passes 176 tests.",
+          "status": "pass",
+          "capturedAt": "2026-08-18T03:41:09.289Z"
+        },
+        {
+          "id": "C003",
+          "scenario": "GUI/CLI regression: exact app Settings gear centerY aligns with the Today date-row centerY within the established visual tolerance while disclosure rail, Tasks, Timer, Dayline, full Swift tests, LSP, and Xcode build remain green.",
+          "userModel": "regression",
+          "expectedEvidence": "<attemptDir>/C003/gear-alignment.png plus geometry JSON, full test/build transcript, and cleanup receipt.",
+          "essential": false,
+          "capturedEvidence": "G006/G007 README and final visual evidence: latest hash 05709db8... keeps the 24pt gear aligned, balanced Tasks/Stream/Today/Timer geometry, readable 10pt compact warning, synchronized #858585 tertiary contract, and recorded interruptible expansion motion. It passes 176 tests, LSP, Debug, and clean Release build.",
+          "status": "pass",
+          "capturedAt": "2026-08-17T15:40:47.262Z"
+        }
+      ],
+      "attempt": 1,
+      "createdAt": "2026-08-16T23:41:11.449Z",
+      "updatedAt": "2026-08-18T07:24:58.000Z",
+      "evidence": "All three G006 criteria pass on current source, automated gates, corrected exact-app interaction evidence, and latest visual PASS.",
+      "startedAt": "2026-08-17T17:01:17.772Z",
+      "completedAt": "2026-08-18T07:24:58.000Z"
+    },
+    {
+      "id": "G007-hover-stream-and-expansion",
+      "title": "Folder hover controls, Stream copy, aligned nested handles, and expansion motion",
+      "objective": "Show edit/delete only for the hovered folder, keep nested Todo leading indentation while aligning all trailing drag handles, remove the legacy recordings banner, rename the Dayline title to Stream, and animate compact Stream/Timer into the five-row Stream plus Today/Timer split.",
+      "status": "complete",
+      "successCriteria": [
+        {
+          "id": "C001",
+          "scenario": "UI: move the pointer between real folder rows. PASS only when edit/delete appear for the exact hovered folder, disappear elsewhere, nested content remains indented, and drag handles share the trailing column.",
+          "userModel": "happy",
+          "expectedEvidence": "<attemptDir>/C001/final-folder-hover.png plus AX IDs and geometry regression.",
+          "essential": true,
+          "capturedEvidence": "G007/a1/C001/final-folder-hover.png and native AX: only 유학 exposes edit/delete while 취업 remains action-free; nested Todo leading inset is preserved and all drag surfaces share the same maxX.",
+          "status": "pass",
+          "capturedAt": "2026-08-18T08:51:22.000Z"
+        },
+        {
+          "id": "C002",
+          "scenario": "UI: inspect compact and expanded activity cards. PASS only when the title is Stream and no legacy recordings review banner is visible or exposed through AX.",
+          "userModel": "regression",
+          "expectedEvidence": "<attemptDir>/C002/final-stream-expanded.png plus runtime AX dump.",
+          "essential": true,
+          "capturedEvidence": "G007/a1/C002/final-stream-expanded.png and runtime AX: Stream is visible and accessible; legacy recordings text is absent while the 37 persisted nil-end rows remain untouched.",
+          "status": "pass",
+          "capturedAt": "2026-08-18T08:51:22.001Z"
+        },
+        {
+          "id": "C003",
+          "scenario": "UI motion: activate the disclosure in the real Release app. PASS only when one Stream row becomes five under an interruptible spring, Today enters the leading half, and the existing Timer controls retarget to the trailing half without a broken endpoint.",
+          "userModel": "happy",
+          "expectedEvidence": "<attemptDir>/C003/final-stream-timer-motion.mov and final-expanded.png plus reduced-motion contract.",
+          "essential": true,
+          "capturedEvidence": "G007/a1/C003/final-stream-timer-motion.mov records the real transition; final-expanded.png shows the balanced endpoint. DaylineMotion uses the approved 0.28/0.82 spring and Reduce Motion snaps to destination.",
+          "status": "pass",
+          "capturedAt": "2026-08-18T08:51:22.002Z"
+        }
+      ],
+      "attempt": 1,
+      "createdAt": "2026-08-18T08:51:22.000Z",
+      "updatedAt": "2026-08-18T08:51:22.002Z",
+      "startedAt": "2026-08-18T08:51:22.000Z",
+      "completedAt": "2026-08-18T08:51:22.002Z",
+      "evidence": "All requested hover, alignment, copy, warning, and expansion-motion behavior passes on Release 05709db8... with 176 tests, clean diagnostics/build, recorded motion, and retained PID 46820."
+    },
+    {
+      "id": "G008-timer-completion-outer-shell-alert-a",
+      "title": "Timer completion outer-shell alert and Count Up active mark",
+      "objective": "On automatic Duration or End Time completion, show exactly three semantic-red outer-shell opacity pulses over 3.0 seconds around the camera-attached shell when collapsed and the complete 816x384 outer shell when expanded, preserving the deadline across expansion; replace the active Count Up zero-progress ring with the existing category-colored stopwatch breathing over a full 1.6-second cycle, with static Reduce Motion endpoints, deterministic tests, isolated mutating QA, read-only normal-profile verification, and no TimerEngine, persistence, data, or shell-geometry change.",
+      "status": "in_progress",
+      "successCriteria": [
+        {
+          "id": "C001",
+          "scenario": "Real Release UI happy path: a short automatic Duration/End Time finish shows exactly three semantic-red outer-shell opacity pulses over 3.0 seconds; collapsed frames outline only the camera-attached shell, expanded frames outline the complete 816x384 shell, and expansion/collapse preserves the original deadline.",
+          "userModel": "happy",
+          "expectedEvidence": "Sentinel-protected isolated-store Release screen recording plus extracted timestamped frames at 0.0/0.5/1.0/1.5/2.0/2.5/3.0 seconds, AX/runtime dump, exact executable hash, and cleanup receipt proving no residual border.",
+          "essential": true,
+          "capturedEvidence": "README.md plus C001/collapsed-completion-window.mov and expanded-completion-window.mov from Release b6b3c14c...: collapsed semantic-red peaks 3880/3879/3877 then zero; expanded peaks 5074/5074/5074 then zero; isolated SQLite sessions finalized at configured duration.",
+          "status": "pass",
+          "capturedAt": "2026-08-18T12:20:53.286Z",
+          "notes": "Real nonactivating app-window recordings show exactly three high-opacity groups on collapsed camera shell and expanded outer shell over the existing 3.0s generation lifetime. Previous failed stale/wrong-screen evidence was removed."
+        },
+        {
+          "id": "C002",
+          "scenario": "Count Up and accessibility boundary: active Count Up replaces the empty determinate ring with the existing category-colored stopwatch breathing through one exact 1.6-second round trip; paused/stopped states do not loop; Reduce Motion shows static stopwatch and solid three-second completion border; root reconstruction and unrelated timer state changes do not restart or cancel an active completion deadline.",
+          "userModel": "edge",
+          "expectedEvidence": "Deterministic manual-scheduler XCTest receipts, hosted normal/Reduce Motion render captures, isolated AX-driven Count Up recording, expansion-retarget recording, and negative assertions for empty ring, fake progress, residual animation, duplicate generation, or real sleeps.",
+          "essential": true,
+          "capturedEvidence": "C002/countup-breathing-window.mov and extracted frames: bright phases at 0.4/2.0s, troughs at 1.2/2.8s, both repeating every 1.6s with stopwatch visible; retarget-expanded-active.png is a 1632x808 real window containing 18808 red pixels after finish-then-expand. Native Reduce Motion renderer test keeps activation/trough pixel-identical with no CA animation and clears at expiry.",
+          "status": "pass",
+          "capturedAt": "2026-08-18T12:21:02.069Z",
+          "notes": "Count Up uses the existing stopwatch symbol and category color, not fake progress. Expansion consumes the same active completion generation; no restart or TimerEngine mutation."
+        },
+        {
+          "id": "C003",
+          "scenario": "Regression and artifact safety: TimerEngine math/finish/sound, session persistence, shell dimensions, Timer/Tasks/Stream/Settings behavior, normal-profile store/preferences bytes, and existing tests remain intact; the final clean Release is codesigned, hash-bound, independently reviewed, and the sole retained normal-profile process.",
+          "userModel": "regression",
+          "expectedEvidence": "Changed-file LSP diagnostics, focused and full Swift test logs, clean Release/codesign/plist receipts, source/bundle/executable hashes, byte-for-byte normal store/preferences before-after hashes, independent review approvals, ULW evidence paths, and final PID/path/store binding.",
+          "essential": false,
+          "capturedEvidence": "Fresh corrected reviewer st_01a014ce reran 188/188 full tests, confirmed scoped LSP clean, Release hash 42fd6b71..., codesign/plist, absolute elapsed Timeline/native layer with no secondary CA interpolation, inactive stroke removal, AX exclusion, final PID 4295, and unchanged normal logical row hashes. Machine receipt: G008/a1/final-verification.json.",
+          "status": "pass",
+          "capturedAt": "2026-08-18T13:07:23.033Z",
+          "notes": "Prior FAIL was fully corrected and retained in audit history. No source rebuild occurred after final replay."
+        }
+      ],
+      "attempt": 1,
+      "createdAt": "2026-08-18T10:00:27.486Z",
+      "updatedAt": "2026-08-18T13:07:23.033Z",
+      "startedAt": "2026-08-18T10:00:33.080Z"
+    },
+    {
+      "id": "G009-collapsed-notch-hover-hitbox-matches",
+      "title": "Collapsed notch hover hitbox matches visible shell boundary",
+      "objective": "While the notch is collapsed, expansion hover and click-through hit testing must match the visible closed NotchShape exactly: exclude the 20pt shadow padding and transparent rounded-corner space, accept points immediately inside the painted boundary, reject points immediately outside it, preserve the optional 44pt running-timer rail when it is visibly part of the shell, and leave expanded-panel hit behavior unchanged.",
+      "status": "pending",
+      "successCriteria": [
+        {
+          "id": "C001",
+          "scenario": "Collapsed real-surface happy path: moving the pointer to points immediately inside the visible closed NotchShape expands the panel after the existing hover delay, while points one pixel below the bottom border or in transparent rounded-corner space do not expand.",
+          "userModel": "happy",
+          "expectedEvidence": "Deterministic path-containment XCTest matrix plus exact Release screen-coordinate QA trace/screenshots for inside-edge, below-edge, and transparent-corner points, bound to executable hash and cleaned back to collapsed state.",
+          "essential": true,
+          "capturedEvidence": "G009 README.md and real pointer screenshots from Release b6b3c14c...: visible center (960,20) expanded to 1632x808; point below visible bottom border but inside old shadow area (960,50) remained collapsed at 640x140.",
+          "status": "pass",
+          "capturedAt": "2026-08-18T12:21:09.295Z",
+          "notes": "Actual AppKit pointer events were used after AX/window readiness; screenshot dimensions and pixels were inspected."
+        },
+        {
+          "id": "C002",
+          "scenario": "Boundary variants: the optional 44pt timer rail remains hittable only when visibly rendered; entering the rectangular tracking bounds through a transparent corner and then moving into the visible path still expands; local hitTest, delayed mouseEntered/mouseMoved recheck, and global pointer expansion share one exact containment predicate.",
+          "userModel": "edge",
+          "expectedEvidence": "Failing-first and green XCTest receipts for idle/running widths, shadow exclusion, curved-corner rejection, inside-path acceptance, screen/local conversion, and move-within-tracking-rect behavior; no fixed sleeps.",
+          "essential": true,
+          "capturedEvidence": "On the measured 220pt closed shell, transparent rounded-corner point (852,20) remained 640x140 collapsed while immediately-inside point (858,20) expanded to 1632x808. Focused tests also cover the visible 44pt running rail, local hitTest, delayed recheck, mouseMoved within tracking bounds, and global screen conversion through one NotchShape.path predicate.",
+          "status": "pass",
+          "capturedAt": "2026-08-18T12:21:17.154Z",
+          "notes": "Real screenshots: C002/transparent-corner-no-expand.png and inside-curve-expands.png."
+        },
+        {
+          "id": "C003",
+          "scenario": "Regression: expanded-panel hover/collapse and full content interaction remain unchanged, shell geometry and timer rail visuals remain identical, full tests/build stay green, normal-profile data is untouched, and the final exact Release is the sole retained process.",
+          "userModel": "regression",
+          "expectedEvidence": "Changed-file LSP diagnostics, focused and full test logs, clean Release/codesign/plist receipts, expanded hit-region regression, visual comparison, normal store/preferences hash receipt, ULW evidence paths, and final PID/hash/store binding.",
+          "essential": false,
+          "capturedEvidence": "Fresh reviewer st_01a014ce verified final Release hash 42fd6b71..., 188/188 tests, exact NotchShape path usage, pointer-actions.json coordinate/AX/screenshot/hash bindings, sole PID 4295, and unchanged normal logical rows across launch.",
+          "status": "pass",
+          "capturedAt": "2026-08-18T13:07:34.759Z",
+          "notes": "Atomic final-hash monitor sessions prevent concurrent physical pointer movement from invalidating center, below-border, transparent-corner, and inside-curve outcomes."
+        }
+      ],
+      "attempt": 0,
+      "createdAt": "2026-08-18T10:16:18.537Z",
+      "updatedAt": "2026-08-18T13:07:34.759Z"
+    }
+  ],
+  "codexObjective": "Complete the durable ulw-loop plan in .omo/ulw-loop/native-scheduler-realtime-recovery-20260817/goals.json, including later accepted/appended stories, under the original brief constraints; use .omo/ulw-loop/native-scheduler-realtime-recovery-20260817/ledger.jsonl as the audit trail.",
+  "activeGoalId": "G008-timer-completion-outer-shell-alert-a"
+}

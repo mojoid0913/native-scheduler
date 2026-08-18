@@ -1,0 +1,123 @@
+{
+  "version": 1,
+  "evidenceLayoutVersion": 2,
+  "createdAt": "2026-07-31T15:17:51.689Z",
+  "updatedAt": "2026-07-31T18:27:07.545Z",
+  "briefPath": ".omo/ulw-loop/category-color-timer-20260801/brief.md",
+  "goalsPath": ".omo/ulw-loop/category-color-timer-20260801/goals.json",
+  "ledgerPath": ".omo/ulw-loop/category-color-timer-20260801/ledger.jsonl",
+  "codexGoalMode": "aggregate",
+  "goals": [
+    {
+      "id": "G001-colorhex-s",
+      "title": "선택한 카테고리의 단일 colorHex가 실행 중 큰 타이머 테두리와 상단 간략 타이머 진행 링에 함께 반영되어야 한다. S...",
+      "objective": "선택한 카테고리의 단일 colorHex가 실행 중 큰 타이머 테두리와 상단 간략 타이머 진행 링에 함께 반영되어야 한다. Study를 #FFA94D로 선택하고 타이머를 시작한 실제 macOS 앱에서 카테고리 점, 큰 타이머 진행선, 상단 간략 링이 같은 주황색임을 스크린샷과 픽셀 증거로 확인한다. 기본 카테고리에서는 기존 기본색으로 안전하게 폴백하고 완료·경고 같은 상태색은 카테고리색과 혼동시키지 않는다. 기존 SwiftUI/CoreData 구조와 다크 디자인을 보존하고 새 의존성이나 광범위 리팩터링 없이 최소 수정한다. 변경 전 실제 화면에서 불일치를 RED로 캡처하고 변경 후 빌드·테스트·실제 GUI 시나리오를 GREEN으로 캡처하며 모든 QA 프로세스와 임시 파일을 정리한다.",
+      "status": "complete",
+      "successCriteria": [
+        {
+          "id": "C001",
+          "scenario": "Computer-use: run the built macOS app, select Study with #FFA94D, start a five-minute timer, capture the expanded panel, collapse it, and capture the top notch ring. PASS only when the Study swatch, expanded countdown progress border, and collapsed notch progress ring all render the same #FFA94D category accent while timer progress remains visible.",
+          "userModel": "happy",
+          "expectedEvidence": ".omo/evidence/category-color-timer/green-expanded.png + green-collapsed.png + green-pixels.txt containing exact capture actions and sampled #FFA94D evidence; fresh RED equivalents captured before implementation; cleanup receipt for QA-owned process/temp paths.",
+          "essential": true,
+          "capturedEvidence": "green-expanded.png b6ea6121 and green-collapsed.png 7a5e85b4 show Study source #FFA94D rendered consistently in swatch, expanded outline, and collapsed ring; green-pixels.txt records #F7BB72 color-managed samples; v12 runtime logs bind PID/window/source fingerprint 3bffea570d78d1c607eec7b419d4f70a05f3308e5070e13e09704436b23f30d7; cleanup left only pre-existing PID 23887.",
+          "status": "pass",
+          "capturedAt": "2026-07-31T18:19:57.815Z",
+          "notes": "RED captures document prior blue mismatch; final owner-bound visual QA PASS."
+        },
+        {
+          "id": "C002",
+          "scenario": "Computer-use edge: run a new timer with no selected category, capture expanded and collapsed states, and inspect rendered pixels. PASS only when both timer accents use the same nsDefaultSlot fallback (#3A3A3A), the Default label remains present, no malformed black/system-blue accent appears, and the app does not crash.",
+          "userModel": "edge",
+          "expectedEvidence": ".omo/evidence/category-color-timer/green-default-expanded.png + green-default-collapsed.png + regression.txt with Default label/fallback observation and pixel sample; fresh RED equivalents before implementation; cleanup receipt.",
+          "essential": true,
+          "capturedEvidence": "green-default-expanded.png ed3139f8 and green-default-collapsed.png 2dbe2acd show Default and neutral fallback; source/runtime resolved #3A3A3A, rendered ring #4B4B4B, no blue/black/crash. Shared resolver malformed/nil regression passes. QA PIDs cleaned; only 23887 remains.",
+          "status": "pass",
+          "capturedAt": "2026-07-31T18:19:57.867Z"
+        },
+        {
+          "id": "C003",
+          "scenario": "Regression: on the changed tree run swift test --package-path NativeScheduler and build the launchable app, then use the real app to start, pause/resume, and finish a short smoke timer. PASS only when tests/build exit 0, progress still advances, pause/resume state remains operable, completion hides the collapsed ring and retains the existing completion pulse/status semantics.",
+          "userModel": "regression",
+          "expectedEvidence": ".omo/evidence/category-color-timer/tests-build.txt plus green-regression-actions.txt and completion screenshot/action log, all on the final tree with QA cleanup receipt.",
+          "essential": false,
+          "capturedEvidence": "tests-build.txt records 30 tests, 0 failures and clean scratch build 6.23s; TimerEngine covers start/pause/resume/completion, green-completion.png 947cbb2f shows isRunning=false progress=0 with ring absent; green-regression-actions.txt records final GUI provenance and cleanup.",
+          "status": "pass",
+          "capturedAt": "2026-07-31T18:19:57.918Z"
+        }
+      ],
+      "attempt": 1,
+      "createdAt": "2026-07-31T15:17:51.689Z",
+      "updatedAt": "2026-07-31T18:20:22.067Z",
+      "startedAt": "2026-07-31T15:22:04.791Z",
+      "completedAt": "2026-07-31T18:20:22.067Z",
+      "evidence": "G001-colorhex-s implementation and all requested color continuity deliverables are complete; .omo/ulw-loop/category-color-timer-20260801/goals.json criteria C001-C003 have owner-bound Study/default/completion evidence, 30/30 validation tests passed, clean build passed, final code review APPROVE and visual/CJK QA PASS."
+    },
+    {
+      "id": "G002-placeholder",
+      "title": "오늘 격자 실시간 기록",
+      "objective": "오늘 격자가 현재 시각에 맞춰 갱신되고 실행 중인 타이머 구간을 선택 카테고리 색으로 즉시 표시하며 종료된 기록은 더 이상 늘어나지 않게 한다.",
+      "status": "complete",
+      "successCriteria": [
+        {
+          "id": "C001",
+          "scenario": "Study 카테고리로 타이머를 시작하면 현재 15분 격자 칸이 2초 이내 #FFA94D 계열로 표시되고 실행 중 시간이 흐르며 사용 시간이 증가한다.",
+          "userModel": "happy",
+          "expectedEvidence": "RED/ GREEN 회귀 테스트 로그와 실제 macOS 화면의 시작 직후 및 진행 후 격자 캡처, 색상 픽셀/창 소유권 기록.",
+          "essential": true,
+          "capturedEvidence": "green-live-heatmap-start.png 95d73a55 and progress.png a769698d are distinct owner-bound captures; v12 logs at currentSlotIndex=12 preserve Study categoryColorHex=#FFA94D after two seconds. HeatmapLiveTests open-session case proves duration growth and future nil. Cleanup left only PID 23887.",
+          "status": "pass",
+          "capturedAt": "2026-07-31T18:21:08.219Z",
+          "notes": "Live grid refreshes the targeted current slot every second rather than reloading all 96 cells."
+        },
+        {
+          "id": "C002",
+          "scenario": "현재 시각의 경계에서 실행 중인 세션은 현재/지난 슬롯만 채우고 미래 슬롯은 채우지 않으며 카테고리 없는 세션은 기본색 #3A3A3A를 사용한다.",
+          "userModel": "edge",
+          "expectedEvidence": "고정 시각 기반 슬롯 경계 단위 테스트와 실제 기본 카테고리 회귀 화면/로그.",
+          "essential": true,
+          "capturedEvidence": "Fixed-clock HeatmapLiveTests prove open sessions color only current/prior slots and future slot remains nil; default captures ed3139f8/2dbe2acd and resolver test prove #3A3A3A for no/malformed category; midnight RED/GREEN proves one full reload clears yesterday.",
+          "status": "pass",
+          "capturedAt": "2026-07-31T18:21:08.270Z"
+        },
+        {
+          "id": "C003",
+          "scenario": "타이머를 일시정지하거나 종료하면 마지막 구간이 저장되고 이후 시간 갱신에서 기록 길이가 더 늘어나지 않으며 기존 기록 색상은 유지된다.",
+          "userModel": "regression",
+          "expectedEvidence": "일시정지/종료 후 고정된 분량을 검증하는 회귀 테스트, 전체 테스트/빌드 로그, 실제 완료 화면.",
+          "essential": false,
+          "capturedEvidence": "Closed-session HeatmapLiveTests proves duration/color freeze; TimerEngineTests cover pause/resume/finish; green-completion.png 947cbb2f shows isRunning=false progress=0 and no collapsed ring; final tests-build.txt records 30/30 plus clean build and exact cleanup.",
+          "status": "pass",
+          "capturedAt": "2026-07-31T18:21:08.321Z"
+        }
+      ],
+      "attempt": 1,
+      "createdAt": "2026-07-31T16:47:13.235Z",
+      "updatedAt": "2026-07-31T18:27:07.545Z",
+      "steeringEvidence": "사용자가 하루 시간 격자가 시간에 따라 흐르고 타이머 실행 구간이 해당 카테고리 색으로 채워지길 명시했다.",
+      "steeringRationale": "새 요청을 기존 색상 일관성 목표에 이어지는 독립 사용자 스토리로 구체화한다.",
+      "startedAt": "2026-07-31T18:20:22.069Z",
+      "completedAt": "2026-07-31T18:27:07.545Z",
+      "evidence": "All six criteria across G001/G002 pass on final source fingerprint 3bffea570d78d1c607eec7b419d4f70a05f3308e5070e13e09704436b23f30d7. Owner-bound macOS screenshots verify Study orange expanded/collapsed/live-grid continuity, neutral default, and completed ring absence; fixed-clock tests verify live growth, future exclusion, closed freeze, and midnight reset; final 30/30 tests and clean builds passed; code review APPROVE/WATCH, manual QA PASS, design fidelity APPROVE, independent gate APPROVE; QA cleanup left only pre-existing PID23887."
+    }
+  ],
+  "codexObjective": "Complete the durable ulw-loop plan in .omo/ulw-loop/category-color-timer-20260801/goals.json, including later accepted/appended stories, under the original brief constraints; use .omo/ulw-loop/category-color-timer-20260801/ledger.jsonl as the audit trail.",
+  "aggregateCompletion": {
+    "status": "complete",
+    "completedAt": "2026-07-31T18:27:07.545Z",
+    "evidence": "All six criteria across G001/G002 pass on final source fingerprint 3bffea570d78d1c607eec7b419d4f70a05f3308e5070e13e09704436b23f30d7. Owner-bound macOS screenshots verify Study orange expanded/collapsed/live-grid continuity, neutral default, and completed ring absence; fixed-clock tests verify live growth, future exclusion, closed freeze, and midnight reset; final 30/30 tests and clean builds passed; code review APPROVE/WATCH, manual QA PASS, design fidelity APPROVE, independent gate APPROVE; QA cleanup left only pre-existing PID23887.",
+    "codexGoal": {
+      "goal": {
+        "threadId": "019fb80d-4b1e-7bb1-bf4f-bc778139fd54",
+        "objective": "Complete the durable ulw-loop plan in .omo/ulw-loop/category-color-timer-20260801/goals.json, including later accepted/appended stories, under the original brief constraints; use .omo/ulw-loop/category-color-timer-20260801/ledger.jsonl as the audit trail.",
+        "status": "complete",
+        "tokensUsed": 46028,
+        "timeUsedSeconds": 366,
+        "createdAt": 1785522011,
+        "updatedAt": 1785522378
+      },
+      "remainingTokens": null,
+      "completionBudgetReport": null
+    }
+  }
+}

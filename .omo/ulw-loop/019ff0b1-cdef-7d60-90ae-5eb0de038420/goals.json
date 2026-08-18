@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "evidenceLayoutVersion": 2,
+  "createdAt": "2026-08-11T13:55:52.536Z",
+  "updatedAt": "2026-08-12T07:56:41.403Z",
+  "briefPath": ".omo/ulw-loop/019ff0b1-cdef-7d60-90ae-5eb0de038420/brief.md",
+  "goalsPath": ".omo/ulw-loop/019ff0b1-cdef-7d60-90ae-5eb0de038420/goals.json",
+  "ledgerPath": ".omo/ulw-loop/019ff0b1-cdef-7d60-90ae-5eb0de038420/ledger.jsonl",
+  "codexGoalMode": "aggregate",
+  "goals": [
+    {
+      "id": "G001-resume-and-finish-the-active-prometh",
+      "title": "Resume and finish the active Prometheus plan dayline-five-day-density...",
+      "objective": "Resume and finish the active Prometheus plan dayline-five-day-density-timer-truth. The product implementation is already frozen; do not change production code unless the single real run exposes a genuine defect. Use the sealed clean G16 candidate to make exactly one actual macOS NativeScheduler live QA attempt, without any Android AVD. Success criteria: (1) the exact app launches and the owner-window evidence visibly proves the expanded five-day Dayline, timer state and category colors plus the planned accessibility/layout bounds; (2) checkpoint, pause/stop, quit/relaunch and offline-cap lifecycle behavior is observed without corrupting data; (3) owned app/Home/temp/build state is cleaned, production digest is unchanged, and no other project or AVD is touched. Stop immediately when those three criteria pass and the existing plan, Boulder ledger, and active goal are reconciled; do not start another recursive verification loop.",
+      "status": "failed",
+      "successCriteria": [
+        {
+          "id": "C001",
+          "scenario": "Computer-use: launch the exact G16-derived NativeScheduler bundle once in an isolated HOME/store; PASS only when owner-window screenshots and AX/window metadata visibly prove compact and expanded five-day Dayline, 96pt timer/summary behavior, default/custom category colors, keyboard access, Reduce Motion handling, and 776x321 child layout without clipping.",
+          "userModel": "happy",
+          "expectedEvidence": ".omo/evidence/start-work/dayline-five-day-density-timer-truth/a1/task-10-exact-live-v15-r29-20260811/LIVE-QA-PASS.json plus owner-window screenshots/AX dumps and visual review reports.",
+          "essential": true,
+          "capturedEvidence": "Attempt 2 C001 failed after exactly three fresh live invocations with no retry: (1) G19 childExitStatus=2 at S01 because helper returned exit2 with valid not-ready JSON; cleanup PASS. (2) G20-r2 childExitStatus=64 after 20 exact-PID probes; PID14619 had one on-screen 816x404 window at multi-display origin (1469,1200), exposing fixed-origin harness drift; cleanup PASS. (3) G21 childExitStatus=2: transcript proves PID30699 became ready on probe3, window2166 bound at (1469,1200,816,404), compact screenshot capture and metadata succeeded, then index070 S01_hover_enter invoked the CG helper post operation and exited2. No expanded, AX, or visual completion followed. Artifacts: a2/generation-19-live, generation-20-r2-live, generation-21-live FAILED-ATTEMPT.json plus G21 exact transcript/raw 060-070. Product digest 58150f312cadb8fdf8679891ae0272ce5a9d398538475db316bbd9d217c79331 unchanged; Android AVD untouched.",
+          "status": "fail",
+          "capturedAt": "2026-08-12T07:56:19.686Z",
+          "notes": "Attempt 2 failure 3/3. Final run bound and captured the exact window, then failed because Task10CGWindowHelperV8 does not support the post hover operation. No further edit or live retry is permitted in this run."
+        },
+        {
+          "id": "C002",
+          "scenario": "Computer-use plus isolated store inspection: checkpoint a running timer, pause/stop, quit/relaunch and simulate the bounded offline interval; PASS only when elapsed/resumed state and the 24h recovery cap match the plan, empty/DST/many-category cases remain honest, and no production store is touched.",
+          "userModel": "edge",
+          "expectedEvidence": ".omo/evidence/start-work/dayline-five-day-density-timer-truth/a1/task-10-exact-live-v15-r29-20260811/LIFECYCLE-QA-PASS.json with before/after isolated-store receipts.",
+          "essential": true,
+          "capturedEvidence": "Blocked by the attempt-2 C001 three-failure limit before lifecycle scenarios could run. G21 reached exact owner-window bind and compact capture, then failed at S01_hover_enter index070 before timer checkpoint, pause, stop, relaunch, and offline-cap cases. No lifecycle PASS artifact exists; do not infer success.",
+          "status": "blocked",
+          "capturedAt": "2026-08-12T07:56:19.787Z",
+          "notes": "Not executed to completion because C001 consumed the three-attempt limit."
+        },
+        {
+          "id": "C003",
+          "scenario": "Terminal/data cleanup audit after the live run: PASS only when the owned NativeScheduler PID, isolated HOME, temp/build/cache roots, listeners, and QA workers are gone; the frozen product digest remains 58150f312cadb8fdf8679891ae0272ce5a9d398538475db316bbd9d217c79331; and Android AVD inventory/state was never invoked or modified.",
+          "userModel": "regression",
+          "expectedEvidence": ".omo/evidence/start-work/dayline-five-day-density-timer-truth/a1/task-10-exact-live-v15-r29-20260811/CLEANUP.json plus final digest/scope receipt.",
+          "essential": false,
+          "capturedEvidence": "PASS across all three attempt-2 runs. generation-19-live, generation-20-r2-live, and generation-21-live CLEANUP.json each report owned NativeScheduler/helper PID and listeners absent, runtime/raw roots removed, candidate immutable, and no pycache/pyc introduced. Product digest remains 58150f312cadb8fdf8679891ae0272ce5a9d398538475db316bbd9d217c79331. Android AVD was neither queried nor acted on.",
+          "status": "pass",
+          "capturedAt": "2026-08-12T07:56:19.885Z",
+          "notes": "Cleanup and isolation passed despite the live-surface failure."
+        }
+      ],
+      "attempt": 2,
+      "createdAt": "2026-08-11T13:55:52.536Z",
+      "updatedAt": "2026-08-12T07:56:41.403Z",
+      "startedAt": "2026-08-11T16:36:24.232Z",
+      "failedAt": "2026-08-12T07:56:41.403Z",
+      "failureReason": "Attempt 2 failed after three C001 live invocations with cleanup each. Final G21 run: exact PID30699 and window2166 bound on probe3 at observed multi-display bounds (1469,1200,816,404); compact screenshot and metadata succeeded; S01_hover_enter index070 called Task10CGWindowHelperV8 post and exited2 because that helper surface is unsupported. C002 blocked before lifecycle. C003 pass. Artifacts under .omo/evidence/ulw/019ff0b1-cdef-7d60-90ae-5eb0de038420/G001-resume-and-finish-the-active-prometh/a2/generation-21-live; product digest 58150f312cadb8fdf8679891ae0272ce5a9d398538475db316bbd9d217c79331 unchanged; Android AVD untouched; Task10 and F1-F4 remain incomplete. Recommended next resumed run: replace S01_hover_enter CG post misuse with the existing pointer-event helper or a pinned dedicated pointer helper, lock with construction RED/GREEN, then fresh exact live QA."
+    }
+  ],
+  "codexObjective": "Complete the durable ulw-loop plan in .omo/ulw-loop/019ff0b1-cdef-7d60-90ae-5eb0de038420/goals.json, including later accepted/appended stories, under the original brief constraints; use .omo/ulw-loop/019ff0b1-cdef-7d60-90ae-5eb0de038420/ledger.jsonl as the audit trail."
+}

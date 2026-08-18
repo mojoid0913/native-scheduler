@@ -1,0 +1,4 @@
+pid_after_cleanup=none
+pointer_restored=500,500
+helper_temp_removed=pending
+helper_temp_removed=yes
